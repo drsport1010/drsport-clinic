@@ -83,9 +83,11 @@ export default function Header() {
 
           {/* Hamburger — left side on mobile */}
           <button
-            className="md:hidden flex flex-col gap-1.5 p-2"
+            type="button"
+            className="md:hidden flex flex-col gap-1.5 p-4"
             aria-label="פתח תפריט"
-            onClick={() => setMenuOpen(!menuOpen)}
+            style={{ cursor: "pointer", WebkitTapHighlightColor: "transparent", touchAction: "manipulation", position: "relative", zIndex: 100 }}
+            onClick={() => setMenuOpen((v) => !v)}
           >
             <span
               className="block w-6 h-0.5 transition-all duration-300"
@@ -126,7 +128,7 @@ export default function Header() {
               right: 0,
               left: 0,
               background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)",
-              zIndex: 49,
+              zIndex: 100,
               boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
             }}
           >
