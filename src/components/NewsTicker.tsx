@@ -45,8 +45,8 @@ export default function NewsTicker() {
         </span>
       </div>
 
-      {/* Scrolling ticker */}
-      <div className="flex-1 overflow-hidden relative">
+      {/* Scrolling ticker — dir:ltr forces physical LTR so inline-flex starts at left edge */}
+      <div className="flex-1 overflow-hidden relative" dir="ltr">
         <div className="ticker-text">
           {repeatedItems.map((item, i) => (
             <span key={i} className="inline-block" style={{ color: "#00E676" }}>

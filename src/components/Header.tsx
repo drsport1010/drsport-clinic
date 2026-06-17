@@ -115,11 +115,20 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — absolute so it floats over page content */}
         {menuOpen && (
           <div
             className="md:hidden py-4 border-t"
-            style={{ borderColor: "rgba(43,87,184,0.4)" }}
+            style={{
+              borderColor: "rgba(43,87,184,0.4)",
+              position: "absolute",
+              top: "64px",
+              right: 0,
+              left: 0,
+              background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)",
+              zIndex: 49,
+              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+            }}
           >
             <nav className="flex flex-col gap-3">
               {navLinks.map((link) => (
