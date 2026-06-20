@@ -23,10 +23,10 @@ export default function ContactSection() {
         {/* Section Header */}
         <div className="mb-10 text-right">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-2" style={{ color: "#F0F4FF" }}>
-            השאר פרטים
+            בואו נדבר
           </h2>
           <p className="text-base" style={{ color: "#8BA4C8" }}>
-            ניחזור אליך תוך 24 שעות · ייעוץ ראשוני ללא התחייבות
+            לתיאום פגישה, הרצאה או שיחת ייעוץ — השאירו את פרטיכם כאן ונדאג לחזור אליכם
           </p>
           <div className="h-1 rounded-full mt-3" style={{ background: "linear-gradient(90deg, transparent, #00E676)", width: "160px", marginLeft: "auto" }} />
         </div>
@@ -78,9 +78,9 @@ export default function ContactSection() {
                   onFocus={(e) => { e.currentTarget.style.borderColor = "#00E676"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(43,87,184,0.4)"; }}>
                   <option value="" style={{ background: "#0D1B35" }}>בחר סיבה...</option>
-                  <option value="injury" style={{ background: "#0D1B35" }}>פציעה חדשה</option>
-                  <option value="recovery" style={{ background: "#0D1B35" }}>שיקום</option>
-                  <option value="second" style={{ background: "#0D1B35" }}>ייעוץ שני</option>
+                  <option value="lecture" style={{ background: "#0D1B35" }}>הזמנת הרצאה</option>
+                  <option value="consult" style={{ background: "#0D1B35" }}>תיאום שיחת ייעוץ</option>
+                  <option value="clinic" style={{ background: "#0D1B35" }}>טיפול בקליניקה</option>
                   <option value="other" style={{ background: "#0D1B35" }}>אחר</option>
                 </select>
               </div>
