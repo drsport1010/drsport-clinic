@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 const navLinks = [
-  { href: "#home", label: "בית" },
+  { href: "/", label: "בית" },
   { href: "#blog", label: "בלוג" },
   { href: "/shop", label: "החנות" },
   { href: "#recovery", label: "שיקום" },
@@ -29,7 +29,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo — right side in RTL */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <a href="#home" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+            <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.png`}
@@ -38,7 +38,7 @@ export default function Header() {
                 height={54}
                 style={{ objectFit: "contain" }}
               />
-            </a>
+            </Link>
           </div>
 
           {/* Desktop nav — left side in RTL */}
