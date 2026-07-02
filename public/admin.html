@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ד״ר ספורט — ניהול</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body { background: #050E1F; color: #F0F4FF; direction: rtl; }
+    .navbar { background: #0D1B35 !important; border-bottom: 1px solid rgba(43,87,184,0.4); }
+    .navbar-brand { color: #00E676 !important; font-weight: 800; }
+    .nav-link { color: #8BA4C8 !important; }
+    .nav-link.active, .nav-link:hover { color: #00E676 !important; }
+    .card { background: #0D1B35; border: 1px solid rgba(43,87,184,0.3); color: #F0F4FF; }
+    .form-control, .form-select {
+      background: rgba(43,87,184,0.1) !important;
+      border: 1px solid rgba(43,87,184,0.4) !important;
+      color: #F0F4FF !important;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #00E676 !important;
+      box-shadow: 0 0 0 0.15rem rgba(0,230,118,0.2) !important;
+    }
+    .form-label { color: #8BA4C8; font-size: 0.8rem; font-weight: 600; }
+    .btn-success { background: #00E676 !important; border-color: #00E676 !important; color: #050E1F !important; font-weight: 700; }
+    .btn-success:hover { background: #00c864 !important; }
+    .btn-danger { background: rgba(255,59,48,0.2) !important; border: 1px solid rgba(255,59,48,0.4) !important; color: #FF3B30 !important; }
+    .btn-outline-success { border-color: #00E676 !important; color: #00E676 !important; }
+    .btn-outline-success:hover { background: rgba(0,230,118,0.15) !important; }
+    .tab-content { padding-top: 24px; }
+    .nav-tabs { border-bottom: 1px solid rgba(43,87,184,0.3); }
+    .nav-tabs .nav-link { background: none; color: #8BA4C8 !important; border: none; border-bottom: 2px solid transparent; }
+    .nav-tabs .nav-link.active { color: #00E676 !important; border-bottom-color: #00E676; background: rgba(0,230,118,0.05) !important; }
+    .athlete-card { background: rgba(43,87,184,0.08); border: 1px solid rgba(43,87,184,0.25); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .section-divider { border-color: rgba(43,87,184,0.3); margin: 24px 0; }
+    .login-wrap { max-width: 380px; margin: 100px auto; }
+    .alert-success-custom { background: rgba(0,230,118,0.15); border: 1px solid rgba(0,230,118,0.4); color: #00E676; }
+    .alert-error-custom { background: rgba(255,59,48,0.15); border: 1px solid rgba(255,59,48,0.4); color: #FF3B30; }
+    .range-label { color: #00E676; font-weight: 700; }
+    input[type=range] { accent-color: #00E676; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="display:none;">
+  <div class="login-wrap">
+    <div class="card p-4">
+      <h2 class="text-center mb-4" style="color:#00E676; font-weight:800;">ד״ר ספורט — ניהול</h2>
+      <div id="login-error" class="alert alert-error-custom mb-3" style="display:none;">סיסמה שגויה</div>
+      <div class="mb-3">
+        <label class="form-label">סיסמת ניהול</label>
+        <input type="password" id="password-input" class="form-control text-center" placeholder="הזן סיסמה" autofocus />
+      </div>
+      <button class="btn btn-success w-100" onclick="login()">כניסה</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-screen" style="display:none;">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <span class="navbar-brand">ד״ר ספורט <span style="color:#8BA4C8; font-weight:400;">— לוח ניהול</span></span>
+      <button class="nav-link ms-auto btn btn-link p-0" onclick="logout()">יציאה</button>
+    </div>
+  </nav>
+
+  <div class="container-fluid py-4 px-4" style="max-width:980px;">
+    <div id="save-msg" style="display:none;" class="mb-4"></div>
+
+    <div id="adminForm">
+      <ul class="nav nav-tabs" id="adminTabs">
+        <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-ticker">טיקר</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-athletes">שיקום</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-hero">גיבור</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-treatments">טיפולים</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-shop">חנות</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-contact">צור קשר</a></li>
+      </ul>
+
+      <div class="tab-content">
+
+        <!-- TICKER TAB -->
+        <div class="tab-pane fade show active" id="tab-ticker">
+          <h5 class="mb-3" style="color:#F0F4FF;">פריטי הטיקר</h5>
+          <div id="ticker-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="addTickerRow()">+ הוסף מבזק</button>
+        </div>
+
+        <!-- ATHLETES TAB -->
+        <div class="tab-pane fade" id="tab-athletes">
+          <h5 class="mb-3" style="color:#F0F4FF;">ספורטאים בשיקום</h5>
+          <div id="athletes-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm" onclick="addAthleteRow()">+ הוסף ספורטאי</button>
+          <hr class="section-divider" />
+          <h5 class="mb-3" style="color:#F0F4FF;">סטטיסטיקות שיקום</h5>
+          <div id="recovery-stats" class="row g-3"></div>
+        </div>
+
+        <!-- HERO TAB -->
+        <div class="tab-pane fade" id="tab-hero">
+          <h5 class="mb-3" style="color:#F0F4FF;">גיבור הסקשן</h5>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">תג (Badge)</label><input type="text" class="form-control" id="hero-badge" /></div>
+            <div class="col-md-6"><label class="form-label">טלפון</label><input type="text" class="form-control" id="hero-phone" /></div>
+            <div class="col-12"><label class="form-label">כותרת ראשית</label><input type="text" class="form-control" id="hero-title" /></div>
+            <div class="col-12"><label class="form-label">כותרת משנה</label><input type="text" class="form-control" id="hero-subtitle" /></div>
+            <div class="col-12"><label class="form-label">תיאור</label><textarea class="form-control" id="hero-description" rows="3"></textarea></div>
+            <div class="col-md-6"><label class="form-label">כפתור ראשי</label><input type="text" class="form-control" id="hero-ctaPrimary" /></div>
+            <div class="col-md-6"><label class="form-label">כפתור משני</label><input type="text" class="form-control" id="hero-ctaSecondary" /></div>
+          </div>
+        </div>
+
+        <!-- TREATMENTS TAB -->
+        <div class="tab-pane fade" id="tab-treatments">
+          <h5 class="mb-3" style="color:#F0F4FF;">טיפולים קליניים</h5>
+          <div id="treatments-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm" onclick="addTreatmentRow()">+ הוסף טיפול</button>
+        </div>
+
+        <!-- SHOP TAB -->
+        <div class="tab-pane fade" id="tab-shop">
+          <h5 class="mb-3" style="color:#F0F4FF;">החנות</h5>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6"><label class="form-label">כותרת החנות</label><input type="text" class="form-control" id="shop-title" /></div>
+            <div class="col-md-6"><label class="form-label">מחיר מוצר</label><input type="text" class="form-control" id="shop-price" /></div>
+            <div class="col-12"><label class="form-label">תת-כותרת</label><input type="text" class="form-control" id="shop-subtitle" /></div>
+            <div class="col-md-8"><label class="form-label">שם המוצר</label><input type="text" class="form-control" id="shop-productName" /></div>
+            <div class="col-md-4"><label class="form-label">עלות משלוח</label><input type="text" class="form-control" id="shop-shippingCost" /></div>
+          </div>
+          <h5 class="mb-3" style="color:#F0F4FF;">בקרוב בחנות</h5>
+          <div id="coming-soon-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="addComingRow()">+ הוסף פריט</button>
+        </div>
+
+        <!-- CONTACT TAB -->
+        <div class="tab-pane fade" id="tab-contact">
+          <h5 class="mb-3" style="color:#F0F4FF;">צור קשר</h5>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6"><label class="form-label">כותרת</label><input type="text" class="form-control" id="contact-title" /></div>
+            <div class="col-md-6"><label class="form-label">טלפון</label><input type="text" class="form-control" id="contact-phone" /></div>
+            <div class="col-12"><label class="form-label">תת-כותרת</label><textarea class="form-control" id="contact-subtitle" rows="2"></textarea></div>
+            <div class="col-12"><label class="form-label">זמן מענה</label><input type="text" class="form-control" id="contact-responseTime" /></div>
+          </div>
+          <h5 class="mb-3" style="color:#F0F4FF;">סיבות פנייה</h5>
+          <div id="reasons-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="addReasonRow()">+ הוסף סיבה</button>
+        </div>
+
+      </div><!-- tab-content -->
+
+      <div class="d-flex justify-content-center mt-5">
+        <button class="btn btn-success px-5 py-3" style="font-size:1.1rem;" onclick="saveContent()">שמור שינויים</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let _token = sessionStorage.getItem('admin_token') || '';
+  let _content = {};
+
+  function showMsg(text, type) {
+    const el = document.getElementById('save-msg');
+    el.className = 'mb-4 alert ' + (type === 'success' ? 'alert-success-custom' : 'alert-error-custom');
+    el.textContent = text;
+    el.style.display = '';
+    setTimeout(() => { el.style.display = 'none'; }, 4000);
+  }
+
+  async function login() {
+    const pw = document.getElementById('password-input').value;
+    const r = await fetch('/api/admin/content', { headers: { Authorization: 'Bearer ' + pw } });
+    if (r.status === 401) { document.getElementById('login-error').style.display = ''; return; }
+    _token = pw;
+    sessionStorage.setItem('admin_token', pw);
+    _content = await r.json();
+    renderAll();
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-screen').style.display = '';
+  }
+
+  function logout() {
+    sessionStorage.removeItem('admin_token');
+    _token = '';
+    document.getElementById('admin-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display = '';
+    document.getElementById('password-input').value = '';
+  }
+
+  async function saveContent() {
+    const data = buildJson();
+    const r = await fetch('/api/admin/content', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _token },
+      body: JSON.stringify(data),
+    });
+    if (r.ok) { _content = data; showMsg('השינויים נשמרו בהצלחה!', 'success'); }
+    else showMsg('שגיאה בשמירה', 'error');
+  }
+
+  function buildJson() {
+    const data = {};
+    data.hero = {};
+    ['badge','title','subtitle','description','phone','ctaPrimary','ctaSecondary'].forEach(k => {
+      const el = document.getElementById('hero-' + k);
+      if (el) data.hero[k] = el.value;
+    });
+    data.ticker = Array.from(document.querySelectorAll('.ticker-input')).map(el => el.value);
+    data.athletes = [];
+    document.querySelectorAll('.athlete-card[data-type="athlete"]').forEach(card => {
+      const obj = {};
+      card.querySelectorAll('[data-field]').forEach(el => {
+        obj[el.dataset.field] = el.dataset.field === 'progress' ? parseInt(el.value) : el.value;
+      });
+      if (obj.name !== undefined) data.athletes.push(obj);
+    });
+    data.recoveryStats = [];
+    document.querySelectorAll('.stat-row').forEach(row => {
+      data.recoveryStats.push({ label: row.querySelector('.stat-label').value, value: row.querySelector('.stat-value').value });
+    });
+    data.treatments = [];
+    document.querySelectorAll('.athlete-card[data-type="treatment"]').forEach(card => {
+      const obj = {};
+      card.querySelectorAll('[data-field]').forEach(el => { obj[el.dataset.field] = el.value; });
+      if (obj.title !== undefined) data.treatments.push(obj);
+    });
+    data.shop = {};
+    ['title','subtitle','productName','price','shippingCost'].forEach(k => {
+      const el = document.getElementById('shop-' + k);
+      if (el) data.shop[k] = el.value;
+    });
+    data.shop.comingSoon = [];
+    document.querySelectorAll('.coming-row').forEach(row => {
+      data.shop.comingSoon.push({ name: row.querySelector('.coming-name').value, price: row.querySelector('.coming-price').value });
+    });
+    data.contact = {};
+    ['title','subtitle','phone','responseTime'].forEach(k => {
+      const el = document.getElementById('contact-' + k);
+      if (el) data.contact[k] = el.value;
+    });
+    data.contact.reasons = Array.from(document.querySelectorAll('.reason-input')).map(el => el.value);
+    return data;
+  }
+
+  function renderAll() {
+    const c = _content;
+    ['badge','title','subtitle','description','phone','ctaPrimary','ctaSecondary'].forEach(k => {
+      const el = document.getElementById('hero-' + k);
+      if (el && c.hero) el.value = c.hero[k] || '';
+    });
+    document.getElementById('ticker-items').innerHTML = '';
+    (c.ticker || []).forEach(item => addTickerRow(item));
+    document.getElementById('athletes-items').innerHTML = '';
+    (c.athletes || []).forEach(a => addAthleteRow(a));
+    const statsEl = document.getElementById('recovery-stats');
+    statsEl.innerHTML = '';
+    (c.recoveryStats || []).forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = 'col-md-6 stat-row';
+      div.innerHTML = `<label class="form-label">תווית ${i+1}</label><input type="text" class="form-control mb-1 stat-label" value="${esc(s.label)}" /><label class="form-label">ערך ${i+1}</label><input type="text" class="form-control stat-value" value="${esc(s.value)}" />`;
+      statsEl.appendChild(div);
+    });
+    document.getElementById('treatments-items').innerHTML = '';
+    (c.treatments || []).forEach(t => addTreatmentRow(t));
+    ['title','subtitle','productName','price','shippingCost'].forEach(k => {
+      const el = document.getElementById('shop-' + k);
+      if (el && c.shop) el.value = c.shop[k] || '';
+    });
+    document.getElementById('coming-soon-items').innerHTML = '';
+    ((c.shop || {}).comingSoon || []).forEach(item => addComingRow(item));
+    ['title','subtitle','phone','responseTime'].forEach(k => {
+      const el = document.getElementById('contact-' + k);
+      if (el && c.contact) el.value = c.contact[k] || '';
+    });
+    document.getElementById('reasons-items').innerHTML = '';
+    ((c.contact || {}).reasons || []).forEach(r => addReasonRow(r));
+  }
+
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+  function addTickerRow(val) {
+    const div = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-2';
+    div.innerHTML = `<input type="text" class="form-control ticker-input" value="${esc(val||'')}" placeholder="מבזק חדש..." /><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">מחק</button>`;
+    document.getElementById('ticker-items').appendChild(div);
+  }
+
+  function addAthleteRow(a) {
+    a = a || {};
+    const div = document.createElement('div');
+    div.className = 'athlete-card';
+    div.dataset.type = 'athlete';
+    div.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <strong>${esc(a.name||'ספורטאי חדש')}</strong>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.athlete-card').remove()">מחק</button>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-6"><label class="form-label">שם</label><input type="text" class="form-control" data-field="name" value="${esc(a.name)}" /></div>
+        <div class="col-md-6"><label class="form-label">ענף ספורט</label><input type="text" class="form-control" data-field="sport" value="${esc(a.sport)}" /></div>
+      </div>
+      <div class="mb-2"><label class="form-label">פציעה</label><input type="text" class="form-control" data-field="injury" value="${esc(a.injury)}" /></div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-6"><label class="form-label">שלב שיקום</label><input type="text" class="form-control" data-field="phase" value="${esc(a.phase)}" /></div>
+        <div class="col-md-6"><label class="form-label">צבע תג</label><input type="text" class="form-control" data-field="phaseColor" value="${esc(a.phaseColor||'#8BA4C8')}" /></div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label">התקדמות שיקום: <span class="range-label">${a.progress||0}%</span></label>
+        <input type="range" class="form-range" min="0" max="100" data-field="progress" value="${a.progress||0}" oninput="this.previousElementSibling.querySelector('.range-label').textContent=this.value+'%'" />
+      </div>
+      <div class="mb-2"><label class="form-label">צפי חזרה (ETA)</label><input type="text" class="form-control" data-field="eta" value="${esc(a.eta)}" /></div>
+      <div class="mb-2"><label class="form-label">תיאור</label><textarea class="form-control" data-field="description" rows="4">${esc(a.description)}</textarea></div>`;
+    document.getElementById('athletes-items').appendChild(div);
+  }
+
+  function addTreatmentRow(t) {
+    t = t || {};
+    const div = document.createElement('div');
+    div.className = 'athlete-card';
+    div.dataset.type = 'treatment';
+    div.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <strong>${esc(t.icon||'')} ${esc(t.title||'טיפול חדש')}</strong>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.athlete-card').remove()">מחק</button>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-6"><label class="form-label">אייקון (emoji)</label><input type="text" class="form-control" data-field="icon" value="${esc(t.icon||'💊')}" /></div>
+        <div class="col-md-6"><label class="form-label">צבע accent</label><input type="text" class="form-control" data-field="accent" value="${esc(t.accent||'#2B57B8')}" /></div>
+      </div>
+      <div class="mb-2"><label class="form-label">כותרת</label><input type="text" class="form-control" data-field="title" value="${esc(t.title||'טיפול חדש')}" /></div>
+      <div class="mb-2"><label class="form-label">תיאור</label><textarea class="form-control" data-field="description" rows="3">${esc(t.description)}</textarea></div>`;
+    document.getElementById('treatments-items').appendChild(div);
+  }
+
+  function addComingRow(item) {
+    item = item || {};
+    const div = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-2 coming-row';
+    div.innerHTML = `<input type="text" class="form-control coming-name" value="${esc(item.name)}" placeholder="שם המוצר" /><input type="text" class="form-control coming-price" style="max-width:120px;" value="${esc(item.price)}" placeholder="₪149" /><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">מחק</button>`;
+    document.getElementById('coming-soon-items').appendChild(div);
+  }
+
+  function addReasonRow(val) {
+    const div = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-2';
+    div.innerHTML = `<input type="text" class="form-control reason-input" value="${esc(val||'')}" placeholder="סיבה חדשה" /><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">מחק</button>`;
+    document.getElementById('reasons-items').appendChild(div);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('password-input').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+    if (_token) {
+      fetch('/api/admin/content', { headers: { Authorization: 'Bearer ' + _token } })
+        .then(r => {
+          if (r.ok) return r.json().then(data => { _content = data; renderAll(); document.getElementById('admin-screen').style.display = ''; });
+          else { sessionStorage.removeItem('admin_token'); _token = ''; document.getElementById('login-screen').style.display = ''; }
+        })
+        .catch(() => { document.getElementById('login-screen').style.display = ''; });
+    } else {
+      document.getElementById('login-screen').style.display = '';
+    }
+  });
+</script>
+</body>
+</html>
