@@ -3,7 +3,7 @@
 const navLinks = [
   { href: "#home", label: "בית" },
   { href: "#blog", label: "בלוג" },
-  { href: "#shop", label: "החנות" },
+  { href: "/shop", label: "החנות" },
   { href: "#recovery", label: "שיקום" },
   { href: "#treatments", label: "טיפולים" },
   { href: "#contact", label: "צור קשר" },
@@ -59,9 +59,9 @@ export default function Footer() {
               className="text-sm leading-relaxed mb-4"
               style={{ color: "#8BA4C8" }}
             >
-              מרפאת הספורט המובילה בישראל.
+              מרפאת ספורט ולונג&apos;ביטי מתקדמת.
               <br />
-              ד״ר אלון כהן — רפואת ספורט מתקדמת.
+              ד״ר אלון כהן — רפואת ספורט מנצחת.
             </p>
             {/* Social icons */}
             <div className="flex items-center gap-3 justify-end">
@@ -184,7 +184,7 @@ export default function Footer() {
             </h4>
             <div className="flex flex-col gap-2">
               <a
-                href="tel:03-123-4567"
+                href="tel:0546635335"
                 className="text-sm transition-colors"
                 style={{ color: "#8BA4C8", textDecoration: "none" }}
                 onMouseEnter={(e) =>
@@ -194,10 +194,10 @@ export default function Footer() {
                   (e.currentTarget.style.color = "#8BA4C8")
                 }
               >
-                📞 03-123-4567
+                📞 054-663-5335
               </a>
               <a
-                href="mailto:info@drsport.co.il"
+                href="mailto:drsport1010@gmail.com"
                 className="text-sm transition-colors"
                 style={{ color: "#8BA4C8", textDecoration: "none" }}
                 onMouseEnter={(e) =>
@@ -207,7 +207,7 @@ export default function Footer() {
                   (e.currentTarget.style.color = "#8BA4C8")
                 }
               >
-                ✉️ info@drsport.co.il
+                ✉️ drsport1010@gmail.com
               </a>
               <p className="text-sm" style={{ color: "#8BA4C8" }}>
                 📍 דרך מנחם בגין 154, תל אביב
@@ -225,7 +225,7 @@ export default function Footer() {
             Built with ❤️ for Dr. Sport
           </p>
           <p className="text-xs text-right" style={{ color: "#8BA4C8" }}>
-            © 2025 Dr. Sport — כל הזכויות שמורות
+            © 2026 Dr. Sport — כל הזכויות שמורות
           </p>
         </div>
       </div>

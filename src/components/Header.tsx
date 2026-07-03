@@ -34,7 +34,7 @@ export default function Header() {
               <img
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.png`}
                 alt="Dr. Sport — Dr. Alon Cohen"
-                style={{ width: "160px", height: "54px", objectFit: "contain", display: "block", filter: "brightness(0) invert(1)" }}
+                style={{ width: "clamp(120px, 35vw, 200px)", height: "auto", objectFit: "contain", display: "block", filter: "brightness(0) invert(1)" }}
               />
             </Link>
           </div>
@@ -75,7 +75,7 @@ export default function Header() {
               )
             )}
             <a
-              href="tel:03-123-4567"
+              href="tel:0546635335"
               className="text-sm font-bold px-4 py-2 rounded-full transition-all duration-200"
               style={{
                 background: "#00E676",
@@ -92,7 +92,7 @@ export default function Header() {
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
-              📞 03-123-4567
+              📞 054-663-5335
             </a>
           </nav>
 
@@ -188,7 +188,7 @@ export default function Header() {
                 )
               )}
               <a
-                href="tel:03-123-4567"
+                href="tel:0546635335"
                 className="text-base font-bold py-2 px-4 rounded-full text-center mt-2"
                 style={{
                   background: "#00E676",
@@ -197,7 +197,7 @@ export default function Header() {
                 }}
                 onClick={() => setMenuOpen(false)}
               >
-                📞 03-123-4567
+                📞 054-663-5335
               </a>
             </nav>
           </div>

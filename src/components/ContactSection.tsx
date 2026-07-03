@@ -35,7 +35,7 @@ export default function ContactSection() {
         <div className="rounded-2xl p-6 mb-8 text-center" style={{ background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)", border: "1px solid rgba(0,230,118,0.3)", boxShadow: "0 0 40px rgba(0,230,118,0.08)" }}>
           <p className="text-xl md:text-2xl font-extrabold" style={{ color: "#F0F4FF" }}>
             קבע תור עכשיו —{" "}
-            <a href="tel:03-123-4567" className="neon-green glow-green" style={{ textDecoration: "none" }}>03-123-4567</a>
+            <a href="tel:0546635335" className="neon-green glow-green" style={{ textDecoration: "none" }}>054-663-5335</a>
           </p>
           <p className="mt-2 text-sm" style={{ color: "#8BA4C8" }}>מענה תוך 24 שעות · ייעוץ ראשוני ללא התחייבות</p>
         </div>
