@@ -210,7 +210,7 @@ export default function Footer() {
                 ✉️ drsport1010@gmail.com
               </a>
               <p className="text-sm" style={{ color: "#8BA4C8" }}>
-                📍 דרך מנחם בגין 154, תל אביב
+                📍 חיים לבנון 60, תל אביב — מרכז הספורט
               </p>
             </div>
           </div>
