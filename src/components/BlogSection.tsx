@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
+
 const articles = [
   {
+    slug: "acl",
     category: "ברך",
     categoryColor: "#2B57B8",
     date: "יוני 2025",
@@ -10,6 +13,7 @@ const articles = [
       'קרע ACL הוא אחת הפציעות המשמעותיות ביותר בספורט. ד״ר כהן מסביר מה קורה ברגע הקרע, מתי נדרש ניתוח שחזור, ומה לצפות בשנת השיקום - כולל חזרה מלאה לשדה.',
   },
   {
+    slug: "achilles",
     category: "גיד אכילס",
     categoryColor: "#FF6D00",
     date: "מאי 2025",
@@ -18,6 +22,7 @@ const articles = [
       'קרע מלא של גיד אכילס מרגיש כמו בעיטה מאחור - ופתאום נגמר המשחק. ד״ר כהן מסביר את ההבדל בין גישה ניתוחית לשמרנית, זמני שיקום ריאליים, וסיכויי חזרה לפעילות.',
   },
   {
+    slug: "hamstring",
     category: "שרירים",
     categoryColor: "#00E676",
     date: "אפריל 2025",
@@ -26,6 +31,7 @@ const articles = [
       'קרעי המסטרינג הם הפציעה החוזרת הנפוצה ביותר בספורט. בלי שיקום מלא ומדויק, הסיכוי לפציעה חוזרת עולה ל-30%. ד״ר כהן מסביר למה זה קורה ואיך עוצרים את המעגל.',
   },
   {
+    slug: "stress-fractures",
     category: "עצמות",
     categoryColor: "#9B59B6",
     date: "מרץ 2025",
@@ -110,8 +116,8 @@ export default function BlogSection() {
               </p>
 
               {/* Read more link */}
-              <a
-                href="#blog"
+              <Link
+                href={`/blog/${article.slug}`}
                 className="text-sm font-bold transition-all duration-200 inline-flex items-center gap-1"
                 style={{ color: "#00E676", textDecoration: "none" }}
                 onMouseEnter={(e) => {
@@ -125,7 +131,7 @@ export default function BlogSection() {
                 }}
               >
                 קרא עוד ←
-              </a>
+              </Link>
             </article>
           ))}
         </div>
