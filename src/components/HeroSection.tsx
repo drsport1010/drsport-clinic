@@ -162,7 +162,7 @@ export default function HeroSection() {
                 el.style.transform = "none";
               }}
             >
-              קרא עוד
+              אודות
             </Link>
           </div>
 
