@@ -88,7 +88,7 @@ export default function HeroSection() {
             }}
           >
             <span className="neon-green glow-green">ד״ר ספורט</span>
-            {" — "}
+            {" - "}
             ד״ר אלון כהן
           </h1>
 

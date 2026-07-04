@@ -26,7 +26,7 @@ export default function ContactSection() {
             בואו נדבר
           </h2>
           <p className="text-base" style={{ color: "#8BA4C8" }}>
-            לתיאום פגישה, הרצאה או שיחת ייעוץ — השאירו את פרטיכם כאן ונדאג לחזור אליכם
+            לתיאום פגישה, הרצאה או שיחת ייעוץ - השאירו את פרטיכם כאן ונדאג לחזור אליכם
           </p>
           <div className="h-1 rounded-full mt-3" style={{ background: "linear-gradient(90deg, transparent, #00E676)", width: "160px", marginLeft: "auto" }} />
         </div>
@@ -34,7 +34,7 @@ export default function ContactSection() {
         {/* Phone CTA */}
         <div className="rounded-2xl p-6 mb-8 text-center" style={{ background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)", border: "1px solid rgba(0,230,118,0.3)", boxShadow: "0 0 40px rgba(0,230,118,0.08)" }}>
           <p className="text-xl md:text-2xl font-extrabold" style={{ color: "#F0F4FF" }}>
-            קבע תור עכשיו —{" "}
+            קבע תור עכשיו -{" "}
             <a href="tel:0546635335" className="neon-green glow-green" style={{ textDecoration: "none" }}>054-663-5335</a>
           </p>
           <p className="mt-2 text-sm" style={{ color: "#8BA4C8" }}>מענה תוך 24 שעות · ייעוץ ראשוני ללא התחייבות</p>

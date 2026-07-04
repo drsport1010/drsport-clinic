@@ -8,7 +8,7 @@ const tickerItems = [
 ];
 
 export default function NewsTicker() {
-  // 2 copies exactly — animation moves -50% for seamless loop
+  // 2 copies exactly - animation moves -50% for seamless loop
   const repeatedItems = [...tickerItems, ...tickerItems];
 
   return (
@@ -45,7 +45,7 @@ export default function NewsTicker() {
         </span>
       </div>
 
-      {/* Scrolling ticker — dir:ltr forces physical LTR so inline-flex starts at left edge */}
+      {/* Scrolling ticker - dir:ltr forces physical LTR so inline-flex starts at left edge */}
       <div className="flex-1 overflow-hidden relative" dir="ltr">
         <div className="ticker-text">
           {repeatedItems.map((item, i) => (

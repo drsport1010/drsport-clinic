@@ -61,7 +61,7 @@ export default function Footer() {
             >
               מרפאת ספורט ולונג&apos;ביטי מתקדמת.
               <br />
-              ד״ר אלון כהן — רפואת ספורט מנצחת.
+              ד״ר אלון כהן - רפואת ספורט מנצחת.
             </p>
             {/* Social icons */}
             <div className="flex items-center gap-3 justify-end">
@@ -143,18 +143,18 @@ export default function Footer() {
             <div className="flex flex-col gap-1.5 mb-6">
               <div className="flex items-center justify-end gap-3">
                 <span className="text-sm" style={{ color: "#8BA4C8" }}>
-                  08:00 – 20:00
+                  08:00 - 20:00
                 </span>
                 <span
                   className="text-sm font-semibold"
                   style={{ color: "#F0F4FF" }}
                 >
-                  ראשון – חמישי
+                  ראשון - חמישי
                 </span>
               </div>
               <div className="flex items-center justify-end gap-3">
                 <span className="text-sm" style={{ color: "#8BA4C8" }}>
-                  08:00 – 14:00
+                  08:00 - 14:00
                 </span>
                 <span
                   className="text-sm font-semibold"
@@ -210,7 +210,7 @@ export default function Footer() {
                 ✉️ drsport1010@gmail.com
               </a>
               <p className="text-sm" style={{ color: "#8BA4C8" }}>
-                📍 חיים לבנון 60, תל אביב — מרכז הספורט
+                📍 חיים לבנון 60, תל אביב - מרכז הספורט
               </p>
             </div>
           </div>
@@ -225,7 +225,7 @@ export default function Footer() {
             Built with ❤️ for Dr. Sport
           </p>
           <p className="text-xs text-right" style={{ color: "#8BA4C8" }}>
-            © 2026 Dr. Sport — כל הזכויות שמורות
+            © 2026 Dr. Sport - כל הזכויות שמורות
           </p>
         </div>
       </div>

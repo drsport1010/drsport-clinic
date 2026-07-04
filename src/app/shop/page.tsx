@@ -5,8 +5,8 @@ import ShopSection from "@/components/ShopSection";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "החנות | Dr. Sport — ד״ר אלון כהן",
-  description: "סקראבס ספורטיביים לאנשי רפואה — Dr. Sport Pro™. הזמינו עכשיו.",
+  title: "החנות | Dr. Sport - ד״ר אלון כהן",
+  description: "סקראבס ספורטיביים לאנשי רפואה - Dr. Sport Pro™. הזמינו עכשיו.",
 };
 
 export default function ShopPage() {

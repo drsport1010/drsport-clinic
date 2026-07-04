@@ -27,19 +27,19 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo — right side in RTL */}
+          {/* Logo - right side in RTL */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.png`}
-                alt="Dr. Sport — Dr. Alon Cohen"
+                alt="Dr. Sport - Dr. Alon Cohen"
                 style={{ width: "clamp(120px, 35vw, 200px)", height: "auto", objectFit: "contain", display: "block", filter: "brightness(0) invert(1)" }}
               />
             </Link>
           </div>
 
-          {/* Desktop nav — left side in RTL */}
+          {/* Desktop nav - left side in RTL */}
           <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((link) =>
               link.href.startsWith("/") ? (
@@ -96,7 +96,7 @@ export default function Header() {
             </a>
           </nav>
 
-          {/* Hamburger — left side on mobile */}
+          {/* Hamburger - left side on mobile */}
           <button
             type="button"
             className="md:hidden flex flex-col gap-1.5 p-4"
@@ -132,7 +132,7 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile menu — absolute so it floats over page content */}
+        {/* Mobile menu - absolute so it floats over page content */}
         {menuOpen && (
           <div
             className="md:hidden py-4 border-t"

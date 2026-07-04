@@ -16,9 +16,9 @@ const colors = [
 ];
 
 const productImages = [
-  { src: `${BASE}/scrub-main.jpg`, alt: "חולצת סקראבס DR Sport — כחול נייבי" },
-  { src: `${BASE}/scrub-colors.jpg`, alt: "חולצת סקראבס DR Sport — 6 צבעים" },
-  { src: `${BASE}/scrub-catalog.jpg`, alt: "חולצת סקראבס DR Sport — קטלוג" },
+  { src: `${BASE}/scrub-main.jpg`, alt: "חולצת סקראבס DR Sport - כחול נייבי" },
+  { src: `${BASE}/scrub-colors.jpg`, alt: "חולצת סקראבס DR Sport - 6 צבעים" },
+  { src: `${BASE}/scrub-catalog.jpg`, alt: "חולצת סקראבס DR Sport - קטלוג" },
 ];
 
 const sizingChart = [
@@ -31,8 +31,8 @@ const sizingChart = [
 ];
 
 const comingSoon = [
-  { name: "גרביי דחיסה — ספורטמד™", price: "₪149" },
-  { name: "כפפות פיזיותרפיה — FlexGrip™", price: "₪229" },
+  { name: "גרביי דחיסה - ספורטמד™", price: "₪149" },
+  { name: "כפפות פיזיותרפיה - FlexGrip™", price: "₪229" },
 ];
 
 export default function ShopSection() {
@@ -50,7 +50,7 @@ export default function ShopSection() {
     }
     const logoNote = logoFile ? ` + לוגו: ${logoFile.name}` : "";
     alert(
-      `נוסף לסל! חולצת סקראבס עם רקימה + מכנסים Dr. Sport™ — מידה ${selectedSize} — ${colors[selectedColor].label}${logoNote} — ₪239 + משלוח ₪30`
+      `נוסף לסל! חולצת סקראבס עם רקימה + מכנסים Dr. Sport™ - מידה ${selectedSize} - ${colors[selectedColor].label}${logoNote} - ₪239 + משלוח ₪30`
     );
   };
 
@@ -70,7 +70,7 @@ export default function ShopSection() {
             החנות של ד״ר ספורט
           </h2>
           <p className="text-base" style={{ color: "#8BA4C8" }}>
-            מדי סקראבס ספורטיביים לאנשי רפואה — בגדי עבודה לרופאים ואנשי רפואה
+            מדי סקראבס ספורטיביים לאנשי רפואה - בגדי עבודה לרופאים ואנשי רפואה
           </p>
           <div
             className="h-1 rounded-full mt-3"
@@ -101,7 +101,7 @@ export default function ShopSection() {
               />
             </div>
 
-            {/* Thumbnail Row — scrollable */}
+            {/* Thumbnail Row - scrollable */}
             {productImages.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-1">
                 {productImages.map((img, i) => (
@@ -141,7 +141,7 @@ export default function ShopSection() {
                 className="text-2xl font-extrabold mb-1"
                 style={{ color: "#F0F4FF" }}
               >
-                חולצת סקראבס עם רקימה + מכנסי סקראבס — Dr. Sport™
+                חולצת סקראבס עם רקימה + מכנסי סקראבס - Dr. Sport™
               </h3>
               <div className="flex items-baseline gap-3 mt-2">
                 <span
@@ -245,7 +245,7 @@ export default function ShopSection() {
                 </span>
               </p>
               <p className="text-xs mb-3" style={{ color: "#8BA4C8" }}>
-                ניתן להעלות לוגו או טקסט לרקימה על החולצה — PNG / JPG / SVG עד 5MB
+                ניתן להעלות לוגו או טקסט לרקימה על החולצה - PNG / JPG / SVG עד 5MB
               </p>
               <div
                 className="rounded-xl p-4 text-center cursor-pointer transition-all duration-200"
@@ -296,7 +296,7 @@ export default function ShopSection() {
                   if (file && file.size <= 5 * 1024 * 1024) {
                     setLogoFile(file);
                   } else if (file) {
-                    alert("הקובץ גדול מדי — מקסימום 5MB");
+                    alert("הקובץ גדול מדי - מקסימום 5MB");
                   }
                 }}
               />
@@ -335,7 +335,7 @@ export default function ShopSection() {
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#2B57B8")}
               >
                 <span>{showSizing ? "▲" : "▼"}</span>
-                מידות זמינות — טבלת מידות
+                מידות זמינות - טבלת מידות
               </button>
 
               {showSizing && (
