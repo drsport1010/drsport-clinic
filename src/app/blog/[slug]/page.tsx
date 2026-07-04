@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import NewsTicker from "@/components/NewsTicker";
@@ -7,6 +8,35 @@ import Footer from "@/components/Footer";
 import { articles, getArticle } from "@/lib/articles";
 
 type Props = { params: Promise<{ slug: string }> };
+
+function renderRichText(text: string): ReactNode[] {
+  const linkRe = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts: ReactNode[] = [];
+  let last = 0;
+  let match: RegExpExecArray | null;
+  while ((match = linkRe.exec(text)) !== null) {
+    if (match.index > last) parts.push(text.slice(last, match.index));
+    parts.push(
+      <a
+        key={match.index}
+        href={match[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          color: "#00E676",
+          fontWeight: 600,
+          textDecoration: "underline",
+          textUnderlineOffset: "3px",
+        }}
+      >
+        {match[1]}
+      </a>
+    );
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
 
 export function generateStaticParams() {
   return articles.map((article) => ({ slug: article.slug }));
@@ -90,7 +120,7 @@ export default async function ArticlePage({ params }: Props) {
                   className="text-base leading-relaxed mb-4"
                   style={{ color: "#C3D2E8" }}
                 >
-                  {paragraph}
+                  {renderRichText(paragraph)}
                 </p>
               ))}
               {section.bullets && (
