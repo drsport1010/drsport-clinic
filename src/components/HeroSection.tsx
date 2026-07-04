@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function HeroSection() {
   return (
     <section
@@ -138,8 +140,8 @@ export default function HeroSection() {
             >
               📅 קבע תור
             </a>
-            <a
-              href="#blog"
+            <Link
+              href="/about"
               className="px-8 py-4 rounded-xl font-extrabold text-base transition-all duration-200"
               style={{
                 background: "transparent",
@@ -161,7 +163,7 @@ export default function HeroSection() {
               }}
             >
               קרא עוד
-            </a>
+            </Link>
           </div>
 
         </div>
