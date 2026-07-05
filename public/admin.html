@@ -309,9 +309,15 @@
       </div>
       <div class="mb-2">
         <label class="form-label">התקדמות שיקום: <span class="range-label">${a.progress||0}%</span></label>
-        <input type="range" class="form-range" min="0" max="100" data-field="progress" value="${a.progress||0}" oninput="this.previousElementSibling.querySelector('.range-label').textContent=this.value+'%'" />
+        <input type="range" class="form-range" min="0" max="100" data-field="progress" value="${a.progress||0}" oninput="this.previousElementSibling.querySelector('.range-label').textContent=this.value+'%';var pd=this.closest('.athlete-card').querySelector('[data-field=progressDate]');if(pd)pd.value=new Date().toISOString().slice(0,10);" />
+        <small style="color:#8BA4C8">האחוז מתקדם אוטומטית באתר לפי התאריכים למטה - עדכן ידנית רק אם צריך</small>
       </div>
-      <div class="mb-2"><label class="form-label">צפי חזרה (ETA)</label><input type="text" class="form-control" data-field="eta" value="${esc(a.eta)}" /></div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-4"><label class="form-label">תאריך פציעה</label><input type="date" class="form-control" data-field="injuryDate" value="${esc(a.injuryDate||'')}" /></div>
+        <div class="col-md-4"><label class="form-label">האחוז נכון לתאריך</label><input type="date" class="form-control" data-field="progressDate" value="${esc(a.progressDate||'')}" /></div>
+        <div class="col-md-4"><label class="form-label">תאריך חזרה משוער</label><input type="date" class="form-control" data-field="returnDate" value="${esc(a.returnDate||'')}" /></div>
+      </div>
+      <div class="mb-2"><label class="form-label">צפי חזרה (ETA - טקסט לתצוגה)</label><input type="text" class="form-control" data-field="eta" value="${esc(a.eta)}" /></div>
       <div class="mb-2"><label class="form-label">תיאור</label><textarea class="form-control" data-field="description" rows="4">${esc(a.description)}</textarea></div>`;
     document.getElementById('athletes-items').appendChild(div);
   }

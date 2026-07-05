@@ -1,71 +1,38 @@
-const athletes = [
-  {
-    name: "ניימאר",
-    sport: "⚽ כדורגל",
-    injury: "פציעה בשריר התאומים (שוק ימין)",
-    phase: "שלב 3 - אימונים קלים",
-    phaseColor: "#2B57B8",
-    progress: 75,
-    eta: "סוף יוני / תחילת יולי 2026",
-    description:
-      "ניימאר נמצא בשלבים האחרונים של שיקום מפציעה בשריר התאומים ברגל ימין. הכוכב הברזילאי כבר חזר השבוע לאימונים קלים על המגרש ועורך אימוני התאמה פיזיים. בנבחרת ברזיל אופטימיים לגבי שילובו בהמשך משחקי גביע העולם, אך הוא לא יסכן את המשך הטורניר וצפוי לחזור רק כשישלים אימון מלא.",
-  },
-  {
-    name: "תמיר בלאט",
-    sport: "🏀 כדורסל",
-    injury: "פציעה בשוק ימין",
-    phase: "Day-to-Day - הערכת מצב",
-    phaseColor: "#FF6D00",
-    progress: 50,
-    eta: "יוני 2026 (סדרת הגמר)",
-    description:
-      'רכז מכבי תל אביב סובל מפציעה בשוק ימין שגרמה לו להחמיץ את פתיחת סדרת הגמר מול הפועל תל אביב. בצוות הרפואי של הצהובים עושים מאמצים להכשיר אותו, והוא נמצא תחת הערכת מצב יומיומית ("Day-to-Day") במטרה להחזירו לרוטציה עוד במהלך הסדרה.',
-  },
-  {
-    name: "הוגו אקטיקה",
-    sport: "⚽ כדורגל",
-    injury: "קרע בגיד האכילס (רגל ימין)",
-    phase: "שלב 2 - שיקום פעיל",
-    phaseColor: "#2B57B8",
-    progress: 30,
-    eta: "26 בדצמבר 2026",
-    description:
-      'חלוץ ליברפול עבר ניתוח מוצלח בלונדון לאחר שקרע את גיד האכילס ברגל ימין במהלך משחק חצי גמר אלופות. למרות שפציעות מסוג זה לוקחות לרוב כ-9 חודשים, דיווחים עדכניים מראים על התקדמות פנומנלית בשיקום. אקטיקה מכוון לחזרה לאימונים כבר בסתיו, במטרה לשוב למגרשים ב"בוקסינג דיי" (26 בדצמבר).',
-  },
-  {
-    name: "קרלוס אלקראס",
-    sport: "🎾 טניס",
-    injury: "דלקת בגיד שורש כף היד הימנית",
-    phase: "שלב 2 - שיקום שמרני",
-    phaseColor: "#FF6D00",
-    progress: 45,
-    eta: "סוף יולי / תחילת אוגוסט 2026",
-    description:
-      "הטניסאי הספרדי המדורג 1 בעולם הושבת בעקבות דלקת חריפה בגיד של שורש כף היד הימנית, מה שאילץ אותו להחמיץ את טורניר רומא ואת אליפות צרפת הפתוחה (רולאן גארוס). אלקראס פועל לפי גישה שמרנית וזהירה כדי למנוע נזק כרוני, והוא צפוי לשוב לסבב המגרשים הקשים בקיץ הקרוב.",
-  },
-  {
-    name: "איסמעיל קונה",
-    sport: "⚽ כדורגל",
-    injury: "שבר כפול ומורכב בשוקית וברשתית הרגל השמאלית (Tibia & Fibula)",
-    phase: "שלב 1 - לאחר ניתוח",
-    phaseColor: "#8BA4C8",
-    progress: 5,
-    eta: "אוקטובר-דצמבר 2026",
-    description:
-      "קשר נבחרת קנדה ומארסיי ספג שבר כפול ומורכב בשוקית וברשתית הרגל השמאלית במהלך משחק מונדיאל מול קטאר באצטדיון BC Place בוונקובר (18 ביוני 2026). הוא פונה ישירות מהמגרש לבית חולים ועבר ניתוח אורתופדי דחוף. קונה יחמיץ את המשך הטורניר, וצפי ההחלמה עומד על 4-6 חודשים לפחות, בכפוף למצב הרקמות הרכות וכלי הדם.",
-  },
-  {
-    name: "דונטה וינצ'נזו",
-    sport: "🏀 כדורסל",
-    injury: "קרע מלא בגיד האכילס (רגל ימין)",
-    phase: "שלב 1 - שיקום ראשוני",
-    phaseColor: "#8BA4C8",
-    progress: 10,
-    eta: "אפריל / מאי 2027",
-    description:
-      "הגארד חווה את אחת הפציעות הקשות ביותר בספורט כאשר קרע את גיד האכילס ברגל ימין בתחילת משחק פלייאוף לאחר ניסיון זריקה לשלוש. וינצ'נזו עבר ניתוח לחיבור הגיד והחל בתהליך שיקום ארוך ומפרך שיגרום לו להחמיץ את מרבית, אם לא את כל, עונת ה-NBA הקרובה.",
-  },
-];
+"use client";
+
+import { useEffect, useState } from "react";
+import { useContent } from "@/lib/useContent";
+
+type Athlete = {
+  name: string;
+  sport: string;
+  injury: string;
+  phase: string;
+  phaseColor: string;
+  progress: number;
+  progressDate?: string;
+  injuryDate?: string;
+  returnDate?: string;
+  eta: string;
+  description: string;
+};
+
+// Auto-advance: interpolate from the last manually-set progress (as of
+// progressDate) up to 100% at returnDate, so the bar moves daily on its own.
+function computeProgress(a: Athlete, now: number): number {
+  const base = typeof a.progress === "number" ? a.progress : 0;
+  if (!a.returnDate) return base;
+  const ret = Date.parse(a.returnDate);
+  const start = Date.parse(a.progressDate || a.injuryDate || "");
+  if (isNaN(ret) || isNaN(start)) return base;
+  if (now >= ret) return 100;
+  if (now <= start || ret <= start) return base;
+  const startPct = a.progressDate ? base : 0;
+  return Math.min(
+    100,
+    Math.round(startPct + (100 - startPct) * ((now - start) / (ret - start)))
+  );
+}
 
 function getProgressGradient(progress: number): string {
   if (progress >= 60) {
@@ -75,6 +42,14 @@ function getProgressGradient(progress: number): string {
 }
 
 export default function RecoveryTracker() {
+  const content = useContent();
+  const athletes = (content.athletes || []) as Athlete[];
+  const stats = content.recoveryStats || [];
+
+  // Compute after mount to avoid SSR/client clock hydration mismatch
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => setNow(Date.now()), []);
+
   return (
     <section
       id="recovery"
@@ -105,7 +80,12 @@ export default function RecoveryTracker() {
 
         {/* Athlete Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {athletes.map((athlete, i) => (
+          {athletes.map((athlete, i) => {
+            const progress =
+              now === null
+                ? athlete.progress || 0
+                : computeProgress(athlete, now);
+            return (
             <div
               key={i}
               className="card-hover rounded-2xl p-6 flex flex-col gap-4"
@@ -165,11 +145,10 @@ export default function RecoveryTracker() {
                   <span
                     className="text-sm font-extrabold"
                     style={{
-                      color:
-                        athlete.progress >= 60 ? "#00E676" : "#FF6D00",
+                      color: progress >= 60 ? "#00E676" : "#FF6D00",
                     }}
                   >
-                    {athlete.progress}%
+                    {progress}%
                   </span>
                 </div>
                 <div
@@ -179,10 +158,10 @@ export default function RecoveryTracker() {
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{
-                      width: `${athlete.progress}%`,
-                      background: getProgressGradient(athlete.progress),
+                      width: `${progress}%`,
+                      background: getProgressGradient(progress),
                       boxShadow:
-                        athlete.progress >= 60
+                        progress >= 60
                           ? "0 0 10px rgba(0,230,118,0.4)"
                           : "0 0 10px rgba(255,109,0,0.4)",
                     }}
@@ -202,17 +181,13 @@ export default function RecoveryTracker() {
                 </span>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
-          {[
-            { label: "ספורטאים בשיקום", value: "24" },
-            { label: "ממוצע זמן שיקום", value: "4.2 חודשים" },
-            { label: "שיעור חזרה מלאה", value: "94%" },
-            { label: "ניתוחים השנה", value: "187" },
-          ].map((stat, i) => (
+          {stats.map((stat, i) => (
             <div
               key={i}
               className="rounded-xl p-4 text-center"
