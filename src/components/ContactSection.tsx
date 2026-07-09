@@ -4,17 +4,44 @@ import { useState } from "react";
 
 const initialForm = { name: "", phone: "", email: "", reason: "", notes: "" };
 
+const reasonLabels: Record<string, string> = {
+  lecture: "הזמנת הרצאה",
+  consult: "תיאום שיחת ייעוץ",
+  clinic: "טיפול בקליניקה",
+  other: "אחר",
+};
+
 export default function ContactSection() {
   const [form, setForm] = useState(initialForm);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("תודה! ניצור איתך קשר תוך 24 שעות");
-    setForm(initialForm);
+    setStatus("sending");
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/drsport1010@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: "ליד חדש מהאתר - Dr. Sport",
+          _template: "table",
+          "שם מלא": form.name,
+          "טלפון": form.phone,
+          "אימייל": form.email || "-",
+          "סיבת הפנייה": reasonLabels[form.reason] || form.reason,
+          "הערות": form.notes || "-",
+        }),
+      });
+      if (!res.ok) throw new Error("send failed");
+      setStatus("success");
+      setForm(initialForm);
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -94,13 +121,23 @@ export default function ContactSection() {
                 onFocus={(e) => { e.currentTarget.style.borderColor = "#00E676"; e.currentTarget.style.boxShadow = "0 0 12px rgba(0,230,118,0.2)"; }}
                 onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(43,87,184,0.4)"; e.currentTarget.style.boxShadow = "none"; }} />
             </div>
-            <button type="submit"
+            <button type="submit" disabled={status === "sending"}
               className="w-full md:w-auto md:self-end px-10 py-4 rounded-xl font-extrabold text-base transition-all duration-200"
-              style={{ background: "#00E676", color: "#050E1F" }}
+              style={{ background: "#00E676", color: "#050E1F", opacity: status === "sending" ? 0.6 : 1 }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "#00c864"; e.currentTarget.style.boxShadow = "0 0 30px rgba(0,230,118,0.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "#00E676"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}>
-              שלח פנייה ✉️
+              {status === "sending" ? "שולח..." : "שלח פנייה ✉️"}
             </button>
+            {status === "success" && (
+              <p className="text-sm font-bold text-right" style={{ color: "#00E676" }}>
+                ✅ הפנייה נשלחה בהצלחה! ניצור איתך קשר תוך 24 שעות.
+              </p>
+            )}
+            {status === "error" && (
+              <p className="text-sm font-bold text-right" style={{ color: "#FF3B30" }}>
+                ⚠️ שליחה נכשלה. אפשר לנסות שוב או להתקשר: 054-663-5335
+              </p>
+            )}
           </form>
         </div>
       </div>
