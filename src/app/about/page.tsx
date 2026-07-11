@@ -18,12 +18,27 @@ export default function AboutPage() {
       <Header />
       <main style={{ paddingTop: "104px", background: "#050E1F" }}>
         <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-right">
-          <h1
-            className="text-3xl md:text-4xl font-extrabold leading-tight mb-4"
-            style={{ color: "#F0F4FF" }}
-          >
-            אודות ד״ר אלון כהן
-          </h1>
+          <div className="flex items-center justify-between gap-6 flex-wrap-reverse mb-4">
+            <img
+              src="/dr-alon.jpg"
+              alt="ד״ר אלון כהן - רופא ספורט"
+              style={{
+                width: "clamp(140px, 18vw, 190px)",
+                aspectRatio: "4 / 5",
+                objectFit: "cover",
+                objectPosition: "center 25%",
+                borderRadius: "50%",
+                border: "3px solid rgba(0,230,118,0.5)",
+                boxShadow: "0 0 40px rgba(0,230,118,0.25)",
+              }}
+            />
+            <h1
+              className="text-3xl md:text-4xl font-extrabold leading-tight"
+              style={{ color: "#F0F4FF" }}
+            >
+              אודות ד״ר אלון כהן
+            </h1>
+          </div>
           <div
             className="h-1 rounded-full mb-10"
             style={{

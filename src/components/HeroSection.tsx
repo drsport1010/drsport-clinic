@@ -65,6 +65,23 @@ export default function HeroSection() {
         style={{ width: "100%", paddingTop: "124px" }}
       >
         <div className="text-right max-w-3xl mr-0 ml-auto">
+          {/* Portrait */}
+          <div className="flex justify-center md:justify-end mb-8">
+            <img
+              src="/dr-alon.jpg"
+              alt="ד״ר אלון כהן - רופא ספורט"
+              style={{
+                width: "clamp(160px, 22vw, 220px)",
+                aspectRatio: "4 / 5",
+                objectFit: "cover",
+                objectPosition: "center 25%",
+                borderRadius: "50%",
+                border: "3px solid rgba(0,230,118,0.5)",
+                boxShadow: "0 0 40px rgba(0,230,118,0.25)",
+              }}
+            />
+          </div>
+
           {/* Badge */}
           <div className="flex items-center gap-2 justify-end mb-6">
             <span
