@@ -7,7 +7,6 @@ export default function HeroSection() {
     <section
       id="home"
       style={{
-        minHeight: "100vh",
         background:
           "linear-gradient(135deg, #050E1F 0%, #0B1F4A 50%, #050E1F 100%)",
         display: "flex",
