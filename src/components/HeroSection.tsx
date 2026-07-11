@@ -11,7 +11,7 @@ export default function HeroSection() {
         background:
           "linear-gradient(135deg, #050E1F 0%, #0B1F4A 50%, #050E1F 100%)",
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-start",
         position: "relative",
         overflow: "hidden",
       }}
@@ -62,26 +62,9 @@ export default function HeroSection() {
 
       <div
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
-        style={{ width: "100%", paddingTop: "124px" }}
+        style={{ width: "100%", paddingTop: "136px", paddingBottom: "48px" }}
       >
         <div className="text-right max-w-3xl mr-0 ml-auto">
-          {/* Portrait */}
-          <div className="flex justify-center md:justify-end mb-8">
-            <img
-              src="/dr-alon.jpg"
-              alt="ד״ר אלון כהן - רופא ספורט"
-              style={{
-                width: "clamp(160px, 22vw, 220px)",
-                aspectRatio: "4 / 5",
-                objectFit: "cover",
-                objectPosition: "center 25%",
-                borderRadius: "50%",
-                border: "3px solid rgba(0,230,118,0.5)",
-                boxShadow: "0 0 40px rgba(0,230,118,0.25)",
-              }}
-            />
-          </div>
-
           {/* Badge */}
           <div className="flex items-center gap-2 justify-end mb-6">
             <span
