@@ -71,7 +71,7 @@ export default function SocialFeed() {
         >
           <p className="text-lg font-bold mb-4" style={{ color: "#F0F4FF" }}>
             עקבו אחרינו ב-{" "}
-            <span style={{ color: "#00E676" }}>@{INSTAGRAM_HANDLE}</span>
+            <span style={{ color: "var(--accent)" }}>@{INSTAGRAM_HANDLE}</span>
           </p>
           <a
             href={`https://instagram.com/${INSTAGRAM_HANDLE}`}

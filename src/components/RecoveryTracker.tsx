@@ -36,7 +36,7 @@ function computeProgress(a: Athlete, now: number): number {
 
 function getProgressGradient(progress: number): string {
   if (progress >= 60) {
-    return `linear-gradient(90deg, #1A3A7C 0%, #00E676 100%)`;
+    return `linear-gradient(90deg, #1A3A7C 0%, var(--accent) 100%)`;
   }
   return `linear-gradient(90deg, #1A3A7C 0%, #FF6D00 100%)`;
 }
@@ -145,7 +145,7 @@ export default function RecoveryTracker() {
                   <span
                     className="text-sm font-extrabold"
                     style={{
-                      color: progress >= 60 ? "#00E676" : "#FF6D00",
+                      color: progress >= 60 ? "var(--accent)" : "#FF6D00",
                     }}
                   >
                     {progress}%
@@ -162,7 +162,7 @@ export default function RecoveryTracker() {
                       background: getProgressGradient(progress),
                       boxShadow:
                         progress >= 60
-                          ? "0 0 10px rgba(0,230,118,0.4)"
+                          ? "0 0 10px color-mix(in srgb, var(--accent) 40%, transparent)"
                           : "0 0 10px rgba(255,109,0,0.4)",
                     }}
                   />
@@ -198,7 +198,7 @@ export default function RecoveryTracker() {
             >
               <div
                 className="text-2xl font-extrabold glow-green"
-                style={{ color: "#00E676" }}
+                style={{ color: "var(--accent)" }}
               >
                 {stat.value}
               </div>

@@ -77,6 +77,10 @@
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-treatments">טיפולים</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-shop">חנות</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-contact">צור קשר</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-blog">בלוג</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-about">אודות</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-footer">פוטר</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-design">עיצוב</a></li>
       </ul>
 
       <div class="tab-content">
@@ -146,6 +150,70 @@
           <h5 class="mb-3" style="color:#F0F4FF;">סיבות פנייה</h5>
           <div id="reasons-items"></div>
           <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="addReasonRow()">+ הוסף סיבה</button>
+        </div>
+
+        <!-- BLOG TAB -->
+        <div class="tab-pane fade" id="tab-blog">
+          <h5 class="mb-2" style="color:#F0F4FF;">מאמרים בבלוג</h5>
+          <p style="color:#8BA4C8; font-size:0.85rem;">4 המאמרים הקבועים (ACL, אכילס, המסטרינג, שברי מאמץ) מנוהלים בנפרד - לעריכה שלהם כתבו לנו. כאן מוסיפים מאמרים חדשים שיופיעו אוטומטית בבלוג שבעמוד הבית.</p>
+          <div class="athlete-card" style="font-size:0.8rem; color:#8BA4C8;">
+            <strong style="color:#00E676;">מדריך כתיבת תוכן המאמר:</strong><br/>
+            · שורה שמתחילה ב-<code>##</code> ורווח = כותרת פרק<br/>
+            · שורה שמתחילה ב-<code>*</code> ורווח = נקודה ברשימה (אפשר "תווית: טקסט")<br/>
+            · קישור: <code>[טקסט](כתובת)</code> · הדגשה: <code>**טקסט**</code><br/>
+            · כל שורה אחרת = פסקה רגילה
+          </div>
+          <div id="articles-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm" onclick="addArticleRow()">+ הוסף מאמר</button>
+        </div>
+
+        <!-- ABOUT TAB -->
+        <div class="tab-pane fade" id="tab-about">
+          <h5 class="mb-3" style="color:#F0F4FF;">עמוד אודות</h5>
+          <div class="mb-3"><label class="form-label">כותרת העמוד</label><input type="text" class="form-control" id="about-title" /></div>
+          <h6 class="mb-2" style="color:#F0F4FF;">פסקאות <small style="color:#8BA4C8; font-weight:400;">(הדגשה: **טקסט**, קישור: [טקסט](כתובת))</small></h6>
+          <div id="about-paras"></div>
+          <button type="button" class="btn btn-outline-success btn-sm mb-3" onclick="addAboutParaRow()">+ הוסף פסקה</button>
+          <div class="mb-3"><label class="form-label">מיקום הקליניקה (הקופסה המודגשת)</label><textarea class="form-control" id="about-location" rows="2"></textarea></div>
+        </div>
+
+        <!-- FOOTER TAB -->
+        <div class="tab-pane fade" id="tab-footer">
+          <h5 class="mb-3" style="color:#F0F4FF;">פוטר האתר</h5>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6"><label class="form-label">שורת תיאור 1</label><input type="text" class="form-control" id="footer-tagline1" /></div>
+            <div class="col-md-6"><label class="form-label">שורת תיאור 2</label><input type="text" class="form-control" id="footer-tagline2" /></div>
+            <div class="col-md-6"><label class="form-label">קישור אינסטגרם</label><input type="text" class="form-control" id="footer-instagram" dir="ltr" /></div>
+            <div class="col-md-6"><label class="form-label">קישור טיקטוק</label><input type="text" class="form-control" id="footer-tiktok" dir="ltr" /></div>
+            <div class="col-md-6"><label class="form-label">אימייל</label><input type="text" class="form-control" id="footer-email" dir="ltr" /></div>
+            <div class="col-md-6"><label class="form-label">טלפון</label><input type="text" class="form-control" id="footer-phone" /></div>
+            <div class="col-12"><label class="form-label">כתובת</label><input type="text" class="form-control" id="footer-address" /></div>
+            <div class="col-12"><label class="form-label">שורת זכויות יוצרים</label><input type="text" class="form-control" id="footer-copyright" /></div>
+          </div>
+          <h6 class="mb-2" style="color:#F0F4FF;">שעות פעילות</h6>
+          <div id="footer-hours"></div>
+          <button type="button" class="btn btn-outline-success btn-sm" onclick="addHourRow()">+ הוסף שורה</button>
+        </div>
+
+        <!-- DESIGN TAB -->
+        <div class="tab-pane fade" id="tab-design">
+          <h5 class="mb-3" style="color:#F0F4FF;">עיצוב האתר</h5>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label class="form-label">צבע הדגשה ראשי</label>
+              <div class="d-flex gap-2 align-items-center">
+                <input type="color" id="design-accentColor" class="form-control form-control-color" value="#00E676" style="width:60px; height:42px;" oninput="document.getElementById('design-accentColorText').value=this.value" />
+                <input type="text" id="design-accentColorText" class="form-control" value="#00E676" style="max-width:130px;" dir="ltr" oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value))document.getElementById('design-accentColor').value=this.value" />
+                <button type="button" class="btn btn-outline-success btn-sm" onclick="document.getElementById('design-accentColor').value='#00E676';document.getElementById('design-accentColorText').value='#00E676'">אפס לירוק</button>
+              </div>
+              <small style="color:#8BA4C8">משפיע על כפתורים, כותרות, קישורים והדגשות בכל האתר</small>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">גודל הלוגו בכותרת: <span id="logo-width-label" class="range-label">160px</span></label>
+              <input type="range" class="form-range" id="design-logoWidth" min="100" max="220" value="160" oninput="document.getElementById('logo-width-label').textContent=this.value+'px'" />
+              <small style="color:#8BA4C8">הרוחב המקסימלי של הלוגו במחשב (במובייל הוא מותאם אוטומטית)</small>
+            </div>
+          </div>
         </div>
 
       </div><!-- tab-content -->
@@ -242,6 +310,33 @@
       if (el) data.contact[k] = el.value;
     });
     data.contact.reasons = Array.from(document.querySelectorAll('.reason-input')).map(el => el.value);
+    data.articles = [];
+    document.querySelectorAll('.athlete-card[data-type="article"]').forEach((card, idx) => {
+      const obj = {};
+      card.querySelectorAll('[data-field]').forEach(el => { obj[el.dataset.field] = el.value; });
+      if (!obj.title || !obj.title.trim()) return;
+      obj.slug = (obj.slug || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
+      if (!obj.slug) obj.slug = 'article-' + (idx + 1) + '-' + Date.now().toString(36);
+      data.articles.push(obj);
+    });
+    data.about = {
+      title: document.getElementById('about-title').value,
+      paragraphs: Array.from(document.querySelectorAll('.about-para')).map(el => el.value).filter(x => x.trim()),
+      location: document.getElementById('about-location').value,
+    };
+    data.footer = {};
+    ['tagline1','tagline2','instagram','tiktok','email','phone','address','copyright'].forEach(k => {
+      const el = document.getElementById('footer-' + k);
+      if (el) data.footer[k] = el.value;
+    });
+    data.footer.hours = Array.from(document.querySelectorAll('.hour-row')).map(r => ({
+      days: r.querySelector('.hour-days').value,
+      time: r.querySelector('.hour-time').value,
+    })).filter(h => h.days.trim());
+    data.design = {
+      accentColor: document.getElementById('design-accentColorText').value || '#00E676',
+      logoWidth: parseInt(document.getElementById('design-logoWidth').value) || 160,
+    };
     return data;
   }
 
@@ -277,6 +372,27 @@
     });
     document.getElementById('reasons-items').innerHTML = '';
     ((c.contact || {}).reasons || []).forEach(r => addReasonRow(r));
+    document.getElementById('articles-items').innerHTML = '';
+    (c.articles || []).forEach(a => addArticleRow(a));
+    const ab = c.about || { title: '', paragraphs: [], location: '' };
+    document.getElementById('about-title').value = ab.title || '';
+    document.getElementById('about-location').value = ab.location || '';
+    document.getElementById('about-paras').innerHTML = '';
+    (ab.paragraphs || []).forEach(p => addAboutParaRow(p));
+    const ft = c.footer || {};
+    ['tagline1','tagline2','instagram','tiktok','email','phone','address','copyright'].forEach(k => {
+      const el = document.getElementById('footer-' + k);
+      if (el) el.value = ft[k] || '';
+    });
+    document.getElementById('footer-hours').innerHTML = '';
+    (ft.hours || []).forEach(h => addHourRow(h));
+    const ds = c.design || {};
+    const accent = ds.accentColor || '#00E676';
+    document.getElementById('design-accentColor').value = accent;
+    document.getElementById('design-accentColorText').value = accent;
+    const lw = ds.logoWidth || 160;
+    document.getElementById('design-logoWidth').value = lw;
+    document.getElementById('logo-width-label').textContent = lw + 'px';
   }
 
   function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
@@ -354,6 +470,47 @@
     div.className = 'd-flex gap-2 mb-2';
     div.innerHTML = `<input type="text" class="form-control reason-input" value="${esc(val||'')}" placeholder="סיבה חדשה" /><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">מחק</button>`;
     document.getElementById('reasons-items').appendChild(div);
+  }
+
+  function addArticleRow(a) {
+    a = a || {};
+    const div = document.createElement('div');
+    div.className = 'athlete-card';
+    div.dataset.type = 'article';
+    div.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <strong>${esc(a.title || 'מאמר חדש')}</strong>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.athlete-card').remove()">מחק</button>
+      </div>
+      <div class="mb-2"><label class="form-label">כותרת המאמר</label><input type="text" class="form-control" data-field="title" value="${esc(a.title)}" /></div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-4"><label class="form-label">כתובת העמוד (באנגלית)</label><input type="text" class="form-control" data-field="slug" value="${esc(a.slug)}" placeholder="knee-pain" dir="ltr" /></div>
+        <div class="col-md-3"><label class="form-label">קטגוריה</label><input type="text" class="form-control" data-field="category" value="${esc(a.category)}" placeholder="ברך" /></div>
+        <div class="col-md-2"><label class="form-label">צבע תג</label><input type="color" class="form-control form-control-color w-100" data-field="categoryColor" value="${a.categoryColor || '#2B57B8'}" /></div>
+        <div class="col-md-3"><label class="form-label">תאריך (לתצוגה)</label><input type="text" class="form-control" data-field="date" value="${esc(a.date)}" placeholder="יולי 2026" /></div>
+      </div>
+      <div class="mb-2"><label class="form-label">תקציר (מוצג בכרטיס בעמוד הבית)</label><textarea class="form-control" data-field="excerpt" rows="2">${esc(a.excerpt)}</textarea></div>
+      <div class="mb-2"><label class="form-label">תוכן המאמר (לפי המדריך למעלה)</label><textarea class="form-control" data-field="body" rows="12" dir="rtl">${esc(a.body)}</textarea></div>
+      <div class="row g-2">
+        <div class="col-md-3"><label class="form-label">מדד הלא נעים (למשל 3/5)</label><input type="text" class="form-control" data-field="ratingScore" value="${esc(a.ratingScore)}" /></div>
+        <div class="col-md-9"><label class="form-label">הסבר המדד</label><input type="text" class="form-control" data-field="ratingText" value="${esc(a.ratingText)}" /></div>
+      </div>`;
+    document.getElementById('articles-items').appendChild(div);
+  }
+
+  function addAboutParaRow(val) {
+    const div = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-2';
+    div.innerHTML = `<textarea class="form-control about-para" rows="4">${esc(val || '')}</textarea><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">מחק</button>`;
+    document.getElementById('about-paras').appendChild(div);
+  }
+
+  function addHourRow(h) {
+    h = h || {};
+    const div = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-2 hour-row';
+    div.innerHTML = `<input type="text" class="form-control hour-days" value="${esc(h.days)}" placeholder="ראשון - חמישי" /><input type="text" class="form-control hour-time" value="${esc(h.time)}" style="max-width:160px;" placeholder="08:00 - 20:00" /><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">מחק</button>`;
+    document.getElementById('footer-hours').appendChild(div);
   }
 
   document.addEventListener('DOMContentLoaded', () => {

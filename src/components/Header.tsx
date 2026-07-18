@@ -5,11 +5,12 @@ import Link from "next/link";
 
 const navLinks = [
   { href: "/", label: "בית" },
-  { href: "#blog", label: "בלוג" },
+  { href: "/#blog", label: "בלוג" },
   { href: "/shop", label: "החנות" },
-  { href: "#recovery", label: "שיקום" },
-  { href: "#treatments", label: "טיפולים" },
-  { href: "#contact", label: "צור קשר" },
+  { href: "/#recovery", label: "שיקום" },
+  { href: "/#treatments", label: "טיפולים" },
+  { href: "/questionnaire", label: "שאלון רפואי" },
+  { href: "/#contact", label: "צור קשר" },
 ];
 
 export default function Header() {
@@ -34,7 +35,7 @@ export default function Header() {
               <img
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.png`}
                 alt="Dr. Sport - Dr. Alon Cohen"
-                style={{ width: "clamp(100px, 28vw, 160px)", height: "auto", objectFit: "contain", display: "block" }}
+                style={{ width: "clamp(100px, 28vw, var(--logo-max, 160px))", height: "auto", objectFit: "contain", display: "block" }}
               />
             </Link>
           </div>
@@ -49,7 +50,7 @@ export default function Header() {
                   className="text-sm font-semibold transition-colors duration-200"
                   style={{ color: "#8BA4C8", textDecoration: "none" }}
                   onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "#00E676")
+                    (e.currentTarget.style.color = "var(--accent)")
                   }
                   onMouseLeave={(e) =>
                     (e.currentTarget.style.color = "#8BA4C8")
@@ -64,7 +65,7 @@ export default function Header() {
                   className="text-sm font-semibold transition-colors duration-200"
                   style={{ color: "#8BA4C8", textDecoration: "none" }}
                   onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "#00E676")
+                    (e.currentTarget.style.color = "var(--accent)")
                   }
                   onMouseLeave={(e) =>
                     (e.currentTarget.style.color = "#8BA4C8")
@@ -78,17 +79,17 @@ export default function Header() {
               href="tel:0546635335"
               className="text-sm font-bold px-4 py-2 rounded-full transition-all duration-200"
               style={{
-                background: "#00E676",
+                background: "var(--accent)",
                 color: "#050E1F",
                 textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#00c864";
+                e.currentTarget.style.background = "var(--accent-dark)";
                 e.currentTarget.style.boxShadow =
-                  "0 0 16px rgba(0,230,118,0.4)";
+                  "0 0 16px color-mix(in srgb, var(--accent) 40%, transparent)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#00E676";
+                e.currentTarget.style.background = "var(--accent)";
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
@@ -157,8 +158,8 @@ export default function Header() {
                     style={{ color: "#F0F4FF", textDecoration: "none" }}
                     onClick={() => setMenuOpen(false)}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "rgba(0,230,118,0.1)";
-                      e.currentTarget.style.color = "#00E676";
+                      e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 10%, transparent)";
+                      e.currentTarget.style.color = "var(--accent)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = "transparent";
@@ -175,8 +176,8 @@ export default function Header() {
                     style={{ color: "#F0F4FF", textDecoration: "none" }}
                     onClick={() => setMenuOpen(false)}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "rgba(0,230,118,0.1)";
-                      e.currentTarget.style.color = "#00E676";
+                      e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 10%, transparent)";
+                      e.currentTarget.style.color = "var(--accent)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = "transparent";
@@ -191,7 +192,7 @@ export default function Header() {
                 href="tel:0546635335"
                 className="text-base font-bold py-2 px-4 rounded-full text-center mt-2"
                 style={{
-                  background: "#00E676",
+                  background: "var(--accent)",
                   color: "#050E1F",
                   textDecoration: "none",
                 }}

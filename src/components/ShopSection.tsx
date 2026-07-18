@@ -75,7 +75,7 @@ export default function ShopSection() {
           <div
             className="h-1 rounded-full mt-3"
             style={{
-              background: "linear-gradient(90deg, transparent, #00E676)",
+              background: "linear-gradient(90deg, transparent, var(--accent))",
               width: "180px",
               marginLeft: "auto",
             }}
@@ -115,7 +115,7 @@ export default function ShopSection() {
                       overflow: "hidden",
                       border:
                         activeImage === i
-                          ? "2px solid #00E676"
+                          ? "2px solid var(--accent)"
                           : "2px solid rgba(43,87,184,0.3)",
                       background: "#f8f8f8",
                       cursor: "pointer",
@@ -146,7 +146,7 @@ export default function ShopSection() {
               <div className="flex items-baseline gap-3 mt-2">
                 <span
                   className="text-3xl font-extrabold"
-                  style={{ color: "#00E676" }}
+                  style={{ color: "var(--accent)" }}
                 >
                   ₪239
                 </span>
@@ -182,11 +182,11 @@ export default function ShopSection() {
                       background: color.value,
                       border:
                         selectedColor === i
-                          ? "2px solid #00E676"
+                          ? "2px solid var(--accent)"
                           : "2px solid rgba(255,255,255,0.2)",
                       boxShadow:
                         selectedColor === i
-                          ? "0 0 12px rgba(0,230,118,0.4)"
+                          ? "0 0 12px color-mix(in srgb, var(--accent) 40%, transparent)"
                           : "none",
                       transform:
                         selectedColor === i ? "scale(1.15)" : "scale(1)",
@@ -204,7 +204,7 @@ export default function ShopSection() {
               >
                 מידה:{" "}
                 {selectedSize ? (
-                  <span style={{ color: "#00E676" }}>{selectedSize}</span>
+                  <span style={{ color: "var(--accent)" }}>{selectedSize}</span>
                 ) : (
                   <span style={{ color: "#8BA4C8" }}>לא נבחרה</span>
                 )}
@@ -218,12 +218,12 @@ export default function ShopSection() {
                     style={{
                       background:
                         selectedSize === size
-                          ? "#00E676"
+                          ? "var(--accent)"
                           : "rgba(43,87,184,0.2)",
                       color: selectedSize === size ? "#050E1F" : "#8BA4C8",
                       border:
                         selectedSize === size
-                          ? "1px solid #00E676"
+                          ? "1px solid var(--accent)"
                           : "1px solid rgba(43,87,184,0.4)",
                     }}
                   >
@@ -251,18 +251,18 @@ export default function ShopSection() {
                 className="rounded-xl p-4 text-center cursor-pointer transition-all duration-200"
                 style={{
                   border: logoFile
-                    ? "2px solid #00E676"
+                    ? "2px solid var(--accent)"
                     : "2px dashed rgba(43,87,184,0.4)",
                   background: logoFile
-                    ? "rgba(0,230,118,0.05)"
+                    ? "color-mix(in srgb, var(--accent) 5%, transparent)"
                     : "rgba(43,87,184,0.08)",
                 }}
                 onClick={() => fileInputRef.current?.click()}
               >
                 {logoFile ? (
                   <div className="flex items-center justify-center gap-2">
-                    <span style={{ color: "#00E676" }}>✓</span>
-                    <span className="text-sm font-semibold" style={{ color: "#00E676" }}>
+                    <span style={{ color: "var(--accent)" }}>✓</span>
+                    <span className="text-sm font-semibold" style={{ color: "var(--accent)" }}>
                       {logoFile.name}
                     </span>
                     <button
@@ -307,17 +307,17 @@ export default function ShopSection() {
               onClick={handleAddToCart}
               className="w-full py-4 rounded-xl text-base font-extrabold tracking-wide transition-all duration-200"
               style={{
-                background: "#00E676",
+                background: "var(--accent)",
                 color: "#050E1F",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#00c864";
+                e.currentTarget.style.background = "var(--accent-dark)";
                 e.currentTarget.style.boxShadow =
-                  "0 0 30px rgba(0,230,118,0.4)";
+                  "0 0 30px color-mix(in srgb, var(--accent) 40%, transparent)";
                 e.currentTarget.style.transform = "translateY(-2px)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#00E676";
+                e.currentTarget.style.background = "var(--accent)";
                 e.currentTarget.style.boxShadow = "none";
                 e.currentTarget.style.transform = "none";
               }}
@@ -331,7 +331,7 @@ export default function ShopSection() {
                 onClick={() => setShowSizing(!showSizing)}
                 className="text-sm font-semibold flex items-center gap-2 transition-colors"
                 style={{ color: "#2B57B8", background: "none", border: "none", cursor: "pointer" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#00E676")}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#2B57B8")}
               >
                 <span>{showSizing ? "▲" : "▼"}</span>
@@ -372,7 +372,7 @@ export default function ShopSection() {
                         >
                           <td
                             className="py-2 px-3 font-bold"
-                            style={{ color: "#00E676" }}
+                            style={{ color: "var(--accent)" }}
                           >
                             {row.size}
                           </td>

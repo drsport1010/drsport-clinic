@@ -39,7 +39,7 @@ export default function HeroSection() {
           height: "500px",
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(0,230,118,0.06) 0%, transparent 70%)",
+            "radial-gradient(circle, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -69,9 +69,9 @@ export default function HeroSection() {
             <span
               className="text-xs font-bold px-4 py-1.5 rounded-full"
               style={{
-                background: "rgba(0,230,118,0.12)",
-                color: "#00E676",
-                border: "1px solid rgba(0,230,118,0.3)",
+                background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+                color: "var(--accent)",
+                border: "1px solid color-mix(in srgb, var(--accent) 30%, transparent)",
                 letterSpacing: "0.08em",
               }}
             >
@@ -120,19 +120,19 @@ export default function HeroSection() {
               href="#contact"
               className="px-8 py-4 rounded-xl font-extrabold text-base transition-all duration-200"
               style={{
-                background: "#00E676",
+                background: "var(--accent)",
                 color: "#050E1F",
                 textDecoration: "none",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget;
-                el.style.background = "#00c864";
-                el.style.boxShadow = "0 0 30px rgba(0,230,118,0.4)";
+                el.style.background = "var(--accent-dark)";
+                el.style.boxShadow = "0 0 30px color-mix(in srgb, var(--accent) 40%, transparent)";
                 el.style.transform = "translateY(-2px)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget;
-                el.style.background = "#00E676";
+                el.style.background = "var(--accent)";
                 el.style.boxShadow = "none";
                 el.style.transform = "none";
               }}

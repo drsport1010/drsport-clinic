@@ -1,50 +1,29 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import NewsTicker from "@/components/NewsTicker";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { articles, getArticle } from "@/lib/articles";
+import { articles, getArticle, customToArticle, type Article } from "@/lib/articles";
+import { getServerContent } from "@/lib/serverContent";
+import { renderRichText } from "@/lib/richText";
 
 type Props = { params: Promise<{ slug: string }> };
 
-function renderRichText(text: string): ReactNode[] {
-  const linkRe = /\[([^\]]+)\]\(([^)]+)\)/g;
-  const parts: ReactNode[] = [];
-  let last = 0;
-  let match: RegExpExecArray | null;
-  while ((match = linkRe.exec(text)) !== null) {
-    if (match.index > last) parts.push(text.slice(last, match.index));
-    parts.push(
-      <a
-        key={match.index}
-        href={match[2]}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          color: "#00E676",
-          fontWeight: 600,
-          textDecoration: "underline",
-          textUnderlineOffset: "3px",
-        }}
-      >
-        {match[1]}
-      </a>
-    );
-    last = match.index + match[0].length;
-  }
-  if (last < text.length) parts.push(text.slice(last));
-  return parts;
+function findArticle(slug: string): Article | undefined {
+  const custom = (getServerContent().articles || []).find((a) => a.slug === slug);
+  if (custom) return customToArticle(custom);
+  return getArticle(slug);
 }
 
 export function generateStaticParams() {
-  return articles.map((article) => ({ slug: article.slug }));
+  const customSlugs = (getServerContent().articles || []).map((a) => ({ slug: a.slug }));
+  return [...articles.map((article) => ({ slug: article.slug })), ...customSlugs];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = findArticle(slug);
   if (!article) return {};
   return {
     title: `${article.title} | Dr. Sport - ד״ר אלון כהן`,
@@ -54,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = findArticle(slug);
   if (!article) notFound();
 
   return (
@@ -67,7 +46,7 @@ export default async function ArticlePage({ params }: Props) {
           <Link
             href="/#blog"
             className="inline-block text-sm font-bold mb-8"
-            style={{ color: "#00E676", textDecoration: "none" }}
+            style={{ color: "var(--accent)", textDecoration: "none" }}
           >
             → חזרה לבלוג
           </Link>
@@ -99,21 +78,23 @@ export default async function ArticlePage({ params }: Props) {
           <div
             className="h-1 rounded-full mb-10"
             style={{
-              background: "linear-gradient(90deg, transparent, #00E676)",
+              background: "linear-gradient(90deg, transparent, var(--accent))",
               width: "160px",
               marginLeft: "auto",
             }}
           />
 
           {/* Sections */}
-          {article.sections.map((section) => (
-            <section key={section.heading} className="mb-10">
-              <h2
-                className="text-xl md:text-2xl font-extrabold mb-4"
-                style={{ color: "#00E676" }}
-              >
-                {section.heading}
-              </h2>
+          {article.sections.map((section, si) => (
+            <section key={si} className="mb-10">
+              {section.heading && (
+                <h2
+                  className="text-xl md:text-2xl font-extrabold mb-4"
+                  style={{ color: "var(--accent)" }}
+                >
+                  {section.heading}
+                </h2>
+              )}
               {section.paragraphs.map((paragraph, i) => (
                 <p
                   key={i}
@@ -149,24 +130,28 @@ export default async function ArticlePage({ params }: Props) {
           ))}
 
           {/* Rating callout */}
-          <div
-            className="rounded-2xl p-6 mb-12"
-            style={{
-              background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)",
-              border: "1px solid rgba(0,230,118,0.3)",
-              boxShadow: "0 0 40px rgba(0,230,118,0.08)",
-            }}
-          >
-            <p
-              className="text-lg font-extrabold mb-2"
-              style={{ color: "#00E676" }}
+          {(article.rating.score || article.rating.text) && (
+            <div
+              className="rounded-2xl p-6 mb-12"
+              style={{
+                background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)",
+                border: "1px solid color-mix(in srgb, var(--accent) 30%, transparent)",
+                boxShadow: "0 0 40px color-mix(in srgb, var(--accent) 8%, transparent)",
+              }}
             >
-              מדד הלא נעים: {article.rating.score}
-            </p>
-            <p className="text-sm leading-relaxed" style={{ color: "#C3D2E8" }}>
-              {article.rating.text}
-            </p>
-          </div>
+              {article.rating.score && (
+                <p
+                  className="text-lg font-extrabold mb-2"
+                  style={{ color: "var(--accent)" }}
+                >
+                  מדד הלא נעים: {article.rating.score}
+                </p>
+              )}
+              <p className="text-sm leading-relaxed" style={{ color: "#C3D2E8" }}>
+                {article.rating.text}
+              </p>
+            </div>
+          )}
 
           {/* CTA */}
           <div
@@ -189,7 +174,7 @@ export default async function ArticlePage({ params }: Props) {
               href="tel:0546635335"
               className="inline-block text-sm font-bold px-6 py-3 rounded-full"
               style={{
-                background: "#00E676",
+                background: "var(--accent)",
                 color: "#050E1F",
                 textDecoration: "none",
               }}

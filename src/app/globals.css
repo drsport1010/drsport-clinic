@@ -6,7 +6,10 @@
   --blue-deep: #0B1F4A;
   --blue-med: #1A3A7C;
   --blue-light: #2B57B8;
-  --neon-green: #00E676;
+  --accent: #00E676;
+  --accent-dark: color-mix(in srgb, var(--accent) 82%, black);
+  --logo-max: 160px;
+  --neon-green: var(--accent);
   --neon-orange: #FF6D00;
   --bg-dark: #050E1F;
   --bg-card: #0D1B35;
@@ -59,12 +62,12 @@ body {
 }
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 230, 118, 0.15);
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .neon-green { color: var(--neon-green); }
 .neon-orange { color: var(--neon-orange); }
-.glow-green { text-shadow: 0 0 20px rgba(0, 230, 118, 0.6); }
+.glow-green { text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 60%, transparent); }
 
 .section-pad { padding: 80px 0; }
 

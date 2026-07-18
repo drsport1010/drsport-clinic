@@ -14,8 +14,9 @@ export function useContent(): ContentData {
       .then(r => r.ok ? r.json() : null)
       .then((data: ContentData | null) => {
         if (data && typeof data === 'object' && Object.keys(data).length > 0) {
-          _cache = data;
-          setContent(data);
+          const merged = { ...defaultContent, ...data };
+          _cache = merged;
+          setContent(merged);
         }
       })
       .catch(() => { /* keep defaults on error */ });

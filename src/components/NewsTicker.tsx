@@ -45,11 +45,11 @@ export default function NewsTicker() {
       <div className="flex-1 overflow-hidden relative" dir="ltr">
         <div className="ticker-text">
           {repeatedItems.map((item, i) => (
-            <span key={i} className="inline-block" style={{ color: "#00E676" }}>
+            <span key={i} className="inline-block" style={{ color: "var(--accent)" }}>
               <span className="mx-6 text-sm font-medium">{item}</span>
               <span
                 className="mx-3 text-xs"
-                style={{ color: "rgba(0,230,118,0.4)" }}
+                style={{ color: "color-mix(in srgb, var(--accent) 40%, transparent)" }}
               >
                 ◆
               </span>

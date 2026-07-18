@@ -1,12 +1,15 @@
 "use client";
 
+import { useContent } from "@/lib/useContent";
+
 const navLinks = [
-  { href: "#home", label: "בית" },
-  { href: "#blog", label: "בלוג" },
+  { href: "/", label: "בית" },
+  { href: "/#blog", label: "בלוג" },
   { href: "/shop", label: "החנות" },
-  { href: "#recovery", label: "שיקום" },
-  { href: "#treatments", label: "טיפולים" },
-  { href: "#contact", label: "צור קשר" },
+  { href: "/#recovery", label: "שיקום" },
+  { href: "/#treatments", label: "טיפולים" },
+  { href: "/questionnaire", label: "שאלון רפואי" },
+  { href: "/#contact", label: "צור קשר" },
 ];
 
 function InstagramIcon() {
@@ -28,6 +31,9 @@ function TikTokIcon() {
 }
 
 export default function Footer() {
+  const { footer } = useContent();
+  const phoneHref = "tel:" + (footer.phone || "").replace(/[^0-9+]/g, "");
+
   return (
     <footer
       style={{
@@ -46,27 +52,27 @@ export default function Footer() {
                 style={{ color: "#F0F4FF" }}
               >
                 DR.{" "}
-                <span style={{ color: "#00E676" }} className="glow-green">
+                <span style={{ color: "var(--accent)" }} className="glow-green">
                   SPORT
                 </span>
               </span>
               <span
                 className="pulse-dot inline-block w-2.5 h-2.5 rounded-full"
-                style={{ background: "#00E676" }}
+                style={{ background: "var(--accent)" }}
               />
             </div>
             <p
               className="text-sm leading-relaxed mb-4"
               style={{ color: "#8BA4C8" }}
             >
-              מרפאת ספורט ולונג&apos;ביטי מתקדמת.
+              {footer.tagline1}
               <br />
-              ד״ר אלון כהן - רפואת ספורט מנצחת.
+              {footer.tagline2}
             </p>
             {/* Social icons */}
             <div className="flex items-center gap-3 justify-end">
               <a
-                href="https://instagram.com/drsportil"
+                href={footer.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
@@ -75,15 +81,13 @@ export default function Footer() {
                     "linear-gradient(135deg, #833AB4, #FD1D1D, #F77737)",
                   color: "#FFF",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.opacity = "0.8")
-                }
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
                 onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
               >
                 <InstagramIcon />
               </a>
               <a
-                href="https://tiktok.com/@drsportil"
+                href={footer.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
@@ -92,12 +96,8 @@ export default function Footer() {
                   color: "#FFF",
                   border: "1px solid rgba(255,255,255,0.15)",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#222")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "#010101")
-                }
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#222")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#010101")}
               >
                 <TikTokIcon />
               </a>
@@ -119,12 +119,8 @@ export default function Footer() {
                   href={link.href}
                   className="text-sm transition-colors duration-200"
                   style={{ color: "#8BA4C8", textDecoration: "none" }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "#00E676")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "#8BA4C8")
-                  }
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#8BA4C8")}
                 >
                   {link.label}
                 </a>
@@ -141,39 +137,19 @@ export default function Footer() {
               שעות פעילות
             </h4>
             <div className="flex flex-col gap-1.5 mb-6">
-              <div className="flex items-center justify-end gap-3">
-                <span className="text-sm" style={{ color: "#8BA4C8" }}>
-                  08:00 - 20:00
-                </span>
-                <span
-                  className="text-sm font-semibold"
-                  style={{ color: "#F0F4FF" }}
-                >
-                  ראשון - חמישי
-                </span>
-              </div>
-              <div className="flex items-center justify-end gap-3">
-                <span className="text-sm" style={{ color: "#8BA4C8" }}>
-                  08:00 - 14:00
-                </span>
-                <span
-                  className="text-sm font-semibold"
-                  style={{ color: "#F0F4FF" }}
-                >
-                  שישי
-                </span>
-              </div>
-              <div className="flex items-center justify-end gap-3">
-                <span className="text-sm" style={{ color: "#8BA4C8" }}>
-                  סגור
-                </span>
-                <span
-                  className="text-sm font-semibold"
-                  style={{ color: "#F0F4FF" }}
-                >
-                  שבת
-                </span>
-              </div>
+              {(footer.hours || []).map((row) => (
+                <div key={row.days} className="flex items-center justify-end gap-3">
+                  <span className="text-sm" style={{ color: "#8BA4C8" }}>
+                    {row.time}
+                  </span>
+                  <span
+                    className="text-sm font-semibold"
+                    style={{ color: "#F0F4FF" }}
+                  >
+                    {row.days}
+                  </span>
+                </div>
+              ))}
             </div>
 
             <h4
@@ -184,33 +160,25 @@ export default function Footer() {
             </h4>
             <div className="flex flex-col gap-2">
               <a
-                href="tel:0546635335"
+                href={phoneHref}
                 className="text-sm transition-colors"
                 style={{ color: "#8BA4C8", textDecoration: "none" }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "#00E676")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "#8BA4C8")
-                }
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#8BA4C8")}
               >
-                📞 054-663-5335
+                📞 {footer.phone}
               </a>
               <a
-                href="mailto:drsport1010@gmail.com"
+                href={`mailto:${footer.email}`}
                 className="text-sm transition-colors"
                 style={{ color: "#8BA4C8", textDecoration: "none" }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "#00E676")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "#8BA4C8")
-                }
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#8BA4C8")}
               >
-                ✉️ drsport1010@gmail.com
+                ✉️ {footer.email}
               </a>
               <p className="text-sm" style={{ color: "#8BA4C8" }}>
-                📍 חיים לבנון 60, תל אביב - מרכז הספורט
+                {footer.address}
               </p>
             </div>
           </div>
@@ -225,7 +193,7 @@ export default function Footer() {
             Built with ❤️ for Dr. Sport
           </p>
           <p className="text-xs text-right" style={{ color: "#8BA4C8" }}>
-            © 2026 Dr. Sport - כל הזכויות שמורות
+            {footer.copyright}
           </p>
         </div>
       </div>

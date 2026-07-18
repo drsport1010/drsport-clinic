@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useContent } from "@/lib/useContent";
+import { customExcerpt } from "@/lib/articles";
 
-const articles = [
+const defaultArticles = [
   {
     slug: "acl",
     category: "ברך",
@@ -42,6 +44,18 @@ const articles = [
 ];
 
 export default function BlogSection() {
+  const { articles: customArticles } = useContent();
+  const articles = [
+    ...defaultArticles,
+    ...(customArticles || []).map((c) => ({
+      slug: c.slug,
+      category: c.category || "כללי",
+      categoryColor: c.categoryColor || "#2B57B8",
+      date: c.date || "",
+      title: c.title,
+      excerpt: customExcerpt(c),
+    })),
+  ];
   return (
     <section
       id="blog"
@@ -60,7 +74,7 @@ export default function BlogSection() {
           <div
             className="h-1 rounded-full"
             style={{
-              background: "linear-gradient(90deg, transparent, #00E676)",
+              background: "linear-gradient(90deg, transparent, var(--accent))",
               width: "200px",
               marginRight: "0",
               marginLeft: "auto",
@@ -119,14 +133,14 @@ export default function BlogSection() {
               <Link
                 href={`/blog/${article.slug}`}
                 className="text-sm font-bold transition-all duration-200 inline-flex items-center gap-1"
-                style={{ color: "#00E676", textDecoration: "none" }}
+                style={{ color: "var(--accent)", textDecoration: "none" }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#00c864";
+                  e.currentTarget.style.color = "var(--accent-dark)";
                   e.currentTarget.style.textShadow =
-                    "0 0 12px rgba(0,230,118,0.5)";
+                    "0 0 12px color-mix(in srgb, var(--accent) 50%, transparent)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#00E676";
+                  e.currentTarget.style.color = "var(--accent)";
                   e.currentTarget.style.textShadow = "none";
                 }}
               >
@@ -142,14 +156,14 @@ export default function BlogSection() {
             href="#blog"
             className="inline-block px-8 py-3 rounded-full text-sm font-bold transition-all duration-200"
             style={{
-              border: "1px solid #00E676",
-              color: "#00E676",
+              border: "1px solid var(--accent)",
+              color: "var(--accent)",
               textDecoration: "none",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(0,230,118,0.1)";
+              e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 10%, transparent)";
               e.currentTarget.style.boxShadow =
-                "0 0 20px rgba(0,230,118,0.2)";
+                "0 0 20px color-mix(in srgb, var(--accent) 20%, transparent)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "transparent";

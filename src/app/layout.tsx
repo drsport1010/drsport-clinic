@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import ThemeStyle from "@/components/ThemeStyle";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.drsport.co.il"),
@@ -53,6 +54,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(clinicJsonLd) }}
         />
+        <ThemeStyle />
         {children}
         <WhatsAppFloat />
       </body>

@@ -55,11 +55,11 @@ export default function ContactSection() {
           <p className="text-base" style={{ color: "#8BA4C8" }}>
             לתיאום פגישה, הרצאה או שיחת ייעוץ - השאירו את פרטיכם כאן ונדאג לחזור אליכם
           </p>
-          <div className="h-1 rounded-full mt-3" style={{ background: "linear-gradient(90deg, transparent, #00E676)", width: "160px", marginLeft: "auto" }} />
+          <div className="h-1 rounded-full mt-3" style={{ background: "linear-gradient(90deg, transparent, var(--accent))", width: "160px", marginLeft: "auto" }} />
         </div>
 
         {/* Phone CTA */}
-        <div className="rounded-2xl p-6 mb-8 text-center" style={{ background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)", border: "1px solid rgba(0,230,118,0.3)", boxShadow: "0 0 40px rgba(0,230,118,0.08)" }}>
+        <div className="rounded-2xl p-6 mb-8 text-center" style={{ background: "linear-gradient(135deg, #0B1F4A 0%, #1A3A7C 100%)", border: "1px solid color-mix(in srgb, var(--accent) 30%, transparent)", boxShadow: "0 0 40px color-mix(in srgb, var(--accent) 8%, transparent)" }}>
           <p className="text-xl md:text-2xl font-extrabold" style={{ color: "#F0F4FF" }}>
             קבע תור עכשיו -{" "}
             <a href="tel:0546635335" className="neon-green glow-green" style={{ textDecoration: "none" }}>054-663-5335</a>
@@ -76,7 +76,7 @@ export default function ContactSection() {
                 <input id="name" name="name" type="text" required value={form.name} onChange={handleChange} placeholder="ישראל ישראלי"
                   className="rounded-xl px-4 py-3 text-sm text-right outline-none"
                   style={{ background: "rgba(43,87,184,0.1)", border: "1px solid rgba(43,87,184,0.4)", color: "#F0F4FF" }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "#00E676"; e.currentTarget.style.boxShadow = "0 0 12px rgba(0,230,118,0.2)"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.boxShadow = "0 0 12px color-mix(in srgb, var(--accent) 20%, transparent)"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(43,87,184,0.4)"; e.currentTarget.style.boxShadow = "none"; }} />
               </div>
               <div className="flex flex-col gap-2">
@@ -84,7 +84,7 @@ export default function ContactSection() {
                 <input id="phone" name="phone" type="tel" required value={form.phone} onChange={handleChange} placeholder="05X-XXX-XXXX"
                   className="rounded-xl px-4 py-3 text-sm text-right outline-none"
                   style={{ background: "rgba(43,87,184,0.1)", border: "1px solid rgba(43,87,184,0.4)", color: "#F0F4FF" }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "#00E676"; e.currentTarget.style.boxShadow = "0 0 12px rgba(0,230,118,0.2)"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.boxShadow = "0 0 12px color-mix(in srgb, var(--accent) 20%, transparent)"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(43,87,184,0.4)"; e.currentTarget.style.boxShadow = "none"; }} />
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function ContactSection() {
                 <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="you@example.com"
                   className="rounded-xl px-4 py-3 text-sm text-right outline-none"
                   style={{ background: "rgba(43,87,184,0.1)", border: "1px solid rgba(43,87,184,0.4)", color: "#F0F4FF" }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "#00E676"; e.currentTarget.style.boxShadow = "0 0 12px rgba(0,230,118,0.2)"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.boxShadow = "0 0 12px color-mix(in srgb, var(--accent) 20%, transparent)"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(43,87,184,0.4)"; e.currentTarget.style.boxShadow = "none"; }} />
               </div>
               <div className="flex flex-col gap-2">
@@ -102,7 +102,7 @@ export default function ContactSection() {
                 <select id="reason" name="reason" required value={form.reason} onChange={handleChange}
                   className="rounded-xl px-4 py-3 text-sm text-right outline-none"
                   style={{ background: "rgba(43,87,184,0.1)", border: "1px solid rgba(43,87,184,0.4)", color: form.reason ? "#F0F4FF" : "#8BA4C8", appearance: "none" }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "#00E676"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(43,87,184,0.4)"; }}>
                   <option value="" style={{ background: "#0D1B35" }}>בחר סיבה...</option>
                   <option value="lecture" style={{ background: "#0D1B35" }}>הזמנת הרצאה</option>
@@ -118,18 +118,18 @@ export default function ContactSection() {
                 placeholder="ספר לנו על הפציעה או הצורך שלך..."
                 className="rounded-xl px-4 py-3 text-sm text-right outline-none resize-none"
                 style={{ background: "rgba(43,87,184,0.1)", border: "1px solid rgba(43,87,184,0.4)", color: "#F0F4FF" }}
-                onFocus={(e) => { e.currentTarget.style.borderColor = "#00E676"; e.currentTarget.style.boxShadow = "0 0 12px rgba(0,230,118,0.2)"; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.boxShadow = "0 0 12px color-mix(in srgb, var(--accent) 20%, transparent)"; }}
                 onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(43,87,184,0.4)"; e.currentTarget.style.boxShadow = "none"; }} />
             </div>
             <button type="submit" disabled={status === "sending"}
               className="w-full md:w-auto md:self-end px-10 py-4 rounded-xl font-extrabold text-base transition-all duration-200"
-              style={{ background: "#00E676", color: "#050E1F", opacity: status === "sending" ? 0.6 : 1 }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#00c864"; e.currentTarget.style.boxShadow = "0 0 30px rgba(0,230,118,0.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#00E676"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}>
+              style={{ background: "var(--accent)", color: "#050E1F", opacity: status === "sending" ? 0.6 : 1 }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "var(--accent-dark)"; e.currentTarget.style.boxShadow = "0 0 30px color-mix(in srgb, var(--accent) 40%, transparent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}>
               {status === "sending" ? "שולח..." : "שלח פנייה ✉️"}
             </button>
             {status === "success" && (
-              <p className="text-sm font-bold text-right" style={{ color: "#00E676" }}>
+              <p className="text-sm font-bold text-right" style={{ color: "var(--accent)" }}>
                 ✅ הפנייה נשלחה בהצלחה! ניצור איתך קשר תוך 24 שעות.
               </p>
             )}

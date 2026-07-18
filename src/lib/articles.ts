@@ -190,3 +190,69 @@ export const articles: Article[] = [
 export function getArticle(slug: string): Article | undefined {
   return articles.find((a) => a.slug === slug);
 }
+
+// --- Custom articles created via the admin panel (stored in content.json) ---
+
+export type CustomArticle = {
+  slug: string;
+  title: string;
+  category: string;
+  categoryColor: string;
+  date: string;
+  excerpt?: string;
+  body: string;
+  ratingScore?: string;
+  ratingText?: string;
+};
+
+// Body format: "## " starts a section heading, "* " is a bullet
+// (optionally "label: text"), anything else is a paragraph.
+export function parseArticleBody(body: string): ArticleSection[] {
+  const sections: ArticleSection[] = [];
+  let current: ArticleSection | null = null;
+  const ensure = (): ArticleSection => {
+    if (!current) {
+      current = { heading: "", paragraphs: [] };
+      sections.push(current);
+    }
+    return current;
+  };
+  for (const raw of (body || "").split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) continue;
+    if (line.startsWith("## ")) {
+      current = { heading: line.slice(3).trim(), paragraphs: [] };
+      sections.push(current);
+    } else if (line.startsWith("* ") || line.startsWith("- ")) {
+      const sec = ensure();
+      const text = line.slice(2).trim();
+      const m = text.match(/^([^:]{1,60}:)\s+(.+)$/);
+      const bullet: ArticleBullet = m ? { label: m[1], text: m[2] } : { text };
+      if (!sec.bullets) sec.bullets = [];
+      sec.bullets.push(bullet);
+    } else {
+      ensure().paragraphs.push(line);
+    }
+  }
+  return sections;
+}
+
+export function customToArticle(c: CustomArticle): Article {
+  return {
+    slug: c.slug,
+    category: c.category || "כללי",
+    categoryColor: c.categoryColor || "#2B57B8",
+    date: c.date || "",
+    title: c.title,
+    sections: parseArticleBody(c.body),
+    rating: { score: c.ratingScore || "", text: c.ratingText || "" },
+  };
+}
+
+export function customExcerpt(c: CustomArticle): string {
+  if (c.excerpt) return c.excerpt;
+  const firstPara =
+    parseArticleBody(c.body).find((s) => s.paragraphs.length > 0)?.paragraphs[0] || "";
+  const plain = firstPara.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*/g, "");
+  return plain.length > 160 ? plain.slice(0, 157) + "..." : plain;
+}
