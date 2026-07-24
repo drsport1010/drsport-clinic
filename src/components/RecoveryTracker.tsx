@@ -60,12 +60,17 @@ export default function RecoveryTracker() {
   const content = useContent();
   // Newest first: reversed relative to the admin-panel list, so the athlete
   // added last in the panel shows at the top of the site.
-  const athletes = [...((content.athletes || []) as Athlete[])].reverse();
+  const allAthletes = [...((content.athletes || []) as Athlete[])].reverse();
   const stats = content.recoveryStats || [];
 
   // Compute after mount to avoid SSR/client clock hydration mismatch
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => setNow(Date.now()), []);
+
+  const VISIBLE_COUNT = 6;
+  const [showAll, setShowAll] = useState(false);
+  const athletes = showAll ? allAthletes : allAthletes.slice(0, VISIBLE_COUNT);
+  const hiddenCount = allAthletes.length - VISIBLE_COUNT;
 
   return (
     <section
@@ -201,6 +206,26 @@ export default function RecoveryTracker() {
             );
           })}
         </div>
+
+        {/* Show more / less older injuries */}
+        {hiddenCount > 0 && (
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="card-hover font-bold px-8 py-3 rounded-full text-sm"
+              style={{
+                background: "rgba(43,87,184,0.15)",
+                border: "1px solid rgba(43,87,184,0.4)",
+                color: "#F0F4FF",
+                cursor: "pointer",
+              }}
+            >
+              {showAll
+                ? "הצג פחות"
+                : `הצג פציעות נוספות (${hiddenCount})`}
+            </button>
+          </div>
+        )}
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
