@@ -58,7 +58,9 @@ function getProgressGradient(progress: number): string {
 
 export default function RecoveryTracker() {
   const content = useContent();
-  const athletes = (content.athletes || []) as Athlete[];
+  // Newest first: reversed relative to the admin-panel list, so the athlete
+  // added last in the panel shows at the top of the site.
+  const athletes = [...((content.athletes || []) as Athlete[])].reverse();
   const stats = content.recoveryStats || [];
 
   // Compute after mount to avoid SSR/client clock hydration mismatch
