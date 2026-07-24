@@ -17,17 +17,32 @@ type Athlete = {
   description: string;
 };
 
-// Auto-advance: interpolate from the last manually-set progress (as of
-// progressDate) up to 100% at returnDate, so the bar moves daily on its own.
+// Auto-advance so the bar is always correct for today's date:
+// - with a manually-set progress (> 0), interpolate from it (as of
+//   progressDate) up to 100% at returnDate;
+// - without one, compute purely from the injuryDate → returnDate timeline.
 function computeProgress(a: Athlete, now: number): number {
   const base = typeof a.progress === "number" ? a.progress : 0;
-  if (!a.returnDate) return base;
-  const ret = Date.parse(a.returnDate);
-  const start = Date.parse(a.progressDate || a.injuryDate || "");
-  if (isNaN(ret) || isNaN(start)) return base;
+  const ret = Date.parse(a.returnDate || "");
+  if (isNaN(ret)) return base;
   if (now >= ret) return 100;
-  if (now <= start || ret <= start) return base;
-  const startPct = a.progressDate ? base : 0;
+  const anchor = Date.parse(a.progressDate || "");
+  const injury = Date.parse(a.injuryDate || "");
+  let start: number;
+  let startPct: number;
+  if (base > 0 && !isNaN(anchor)) {
+    start = anchor;
+    startPct = base;
+  } else if (!isNaN(injury)) {
+    start = injury;
+    startPct = 0;
+  } else if (!isNaN(anchor)) {
+    start = anchor;
+    startPct = base;
+  } else {
+    return base;
+  }
+  if (now <= start || ret <= start) return startPct;
   return Math.min(
     100,
     Math.round(startPct + (100 - startPct) * ((now - start) / (ret - start)))
