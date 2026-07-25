@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import ThemeStyle from "@/components/ThemeStyle";
@@ -54,6 +55,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(clinicJsonLd) }}
         />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QK0Q4XDKTB"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QK0Q4XDKTB');`}
+        </Script>
         <ThemeStyle />
         {children}
         <WhatsAppFloat />
