@@ -182,6 +182,14 @@ export default async function ArticlePage({ params }: Props) {
               📞 054-663-5335
             </a>
           </div>
+
+          {/* Signature */}
+          <p
+            className="text-center text-lg font-extrabold mt-10"
+            style={{ color: "var(--accent)" }}
+          >
+            ד״ר אלון כהן - רפואת ספורט מנצחת
+          </p>
         </article>
       </main>
       <Footer />
