@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.drsport.co.il"),
   title: "ד״ר ספורט - רפואת ספורט מנצחת - ד״ר אלון כהן",
   description: "ד״ר אלון כהן - רופא ספורט. אבחון, טיפול ושיקום פציעות ספורטאים. רפואה רגנרטיבית ולונג'ביטי.",
-  keywords: "רופא ספורט, רפואת ספורט, טיפול בפציעות ספורט, שיקום ספורטאים, פציעות ספורט, אבחון פציעות ספורט, רופא ספורט תל אביב, ד״ר אלון כהן, Dr Sport",
+  keywords: "רופא ספורט, רפואת ספורט, ד״ר ספורט, טיפול בספורטאים, טיפול בפציעות ספורט, שיקום ספורטאים, פציעות ספורט, אבחון פציעות ספורט, רופא ספורט תל אביב, ד״ר אלון כהן, Dr Sport",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -25,6 +25,8 @@ const clinicJsonLd = {
   "@context": "https://schema.org",
   "@type": "MedicalClinic",
   name: "Dr. Sport - ד״ר אלון כהן",
+  alternateName: ["ד״ר ספורט", "רופא ספורט - ד״ר אלון כהן", "Dr Sport"],
+  keywords: "רפואת ספורט, רופא ספורט, ד״ר ספורט, טיפול בספורטאים",
   url: "https://www.drsport.co.il",
   telephone: "+972546635335",
   email: "drsport1010@gmail.com",
