@@ -1,4 +1,4 @@
-import type { CustomArticle } from "./articles";
+import type { CustomArticle, WeeklyUpdate } from "./articles";
 
 const defaultContent = {
   hero: {
@@ -90,6 +90,7 @@ const defaultContent = {
     logoWidth: 160,
   },
   articles: [] as CustomArticle[],
+  weeklyUpdates: [] as WeeklyUpdate[],
 };
 
 export type ContentData = typeof defaultContent;

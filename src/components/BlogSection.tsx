@@ -44,7 +44,10 @@ const defaultArticles = [
 ];
 
 export default function BlogSection() {
-  const { articles: customArticles } = useContent();
+  const { articles: customArticles, weeklyUpdates } = useContent();
+  const latestWeekly = [...(weeklyUpdates || [])].sort((a, b) =>
+    a.id < b.id ? 1 : -1
+  )[0];
   const articles = [
     ...defaultArticles,
     ...(customArticles || []).map((c) => ({
@@ -87,6 +90,55 @@ export default function BlogSection() {
 
         {/* Articles Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Pinned weekly update — always first */}
+          {latestWeekly && (
+            <article
+              className="card-hover rounded-2xl p-6 flex flex-col gap-4"
+              style={{
+                background:
+                  "linear-gradient(135deg, #0B1F4A 0%, #0D1B35 100%)",
+                border:
+                  "1px solid color-mix(in srgb, var(--accent) 55%, transparent)",
+                boxShadow:
+                  "0 0 30px color-mix(in srgb, var(--accent) 12%, transparent)",
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <span
+                  className="text-xs font-bold px-3 py-1 rounded-full"
+                  style={{
+                    background: "var(--accent)",
+                    color: "#050E1F",
+                  }}
+                >
+                  🗓 העדכון השבועי
+                </span>
+                <span className="text-xs" style={{ color: "#8BA4C8" }}>
+                  {latestWeekly.dateLabel}
+                </span>
+              </div>
+              <h3
+                className="text-lg font-bold leading-snug"
+                style={{ color: "#F0F4FF" }}
+              >
+                העדכון השבועי של ד״ר ספורט
+              </h3>
+              <p
+                className="text-sm leading-relaxed flex-1"
+                style={{ color: "#8BA4C8" }}
+              >
+                {latestWeekly.headline} - סיכום הפציעות החדשות של השבוע ומעקב
+                אחרי הספורטאים שבשיקום.
+              </p>
+              <Link
+                href="/blog/weekly"
+                className="text-sm font-bold transition-all duration-200 inline-flex items-center gap-1"
+                style={{ color: "var(--accent)", textDecoration: "none" }}
+              >
+                קרא עוד ←
+              </Link>
+            </article>
+          )}
           {articles.map((article, i) => (
             <article
               key={i}

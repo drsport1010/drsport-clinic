@@ -270,7 +270,9 @@
   }
 
   function buildJson() {
-    const data = {};
+    // Seed from the loaded content so fields the panel doesn't manage
+    // (e.g. weeklyUpdates) survive a save instead of being dropped.
+    const data = _content ? JSON.parse(JSON.stringify(_content)) : {};
     data.hero = {};
     ['badge','title','subtitle','description','phone','ctaPrimary','ctaSecondary'].forEach(k => {
       const el = document.getElementById('hero-' + k);

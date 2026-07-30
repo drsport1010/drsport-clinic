@@ -193,6 +193,14 @@ export function getArticle(slug: string): Article | undefined {
 
 // --- Custom articles created via the admin panel (stored in content.json) ---
 
+// One edition of the weekly injuries roundup, published after Alon's approval.
+export type WeeklyUpdate = {
+  id: string; // ISO publish date, e.g. "2026-07-31" — newest edition wins
+  dateLabel: string; // display date, e.g. "31.7.2026"
+  headline: string; // edition-specific headline shown under the page title
+  body: string; // same format as CustomArticle.body (parseArticleBody)
+};
+
 export type CustomArticle = {
   slug: string;
   title: string;
