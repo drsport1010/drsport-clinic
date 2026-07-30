@@ -12,13 +12,19 @@ type Props = { params: Promise<{ slug: string }> };
 
 function findArticle(slug: string): Article | undefined {
   const custom = (getServerContent().articles || []).find((a) => a.slug === slug);
-  if (custom) return customToArticle(custom);
+  // A panel-managed article overrides the built-in one; drafts are hidden.
+  if (custom) return custom.published === false ? undefined : customToArticle(custom);
   return getArticle(slug);
 }
 
 export function generateStaticParams() {
-  const customSlugs = (getServerContent().articles || []).map((a) => ({ slug: a.slug }));
-  return [...articles.map((article) => ({ slug: article.slug })), ...customSlugs];
+  const custom = getServerContent().articles || [];
+  const slugs = new Set(articles.map((article) => article.slug));
+  for (const a of custom) {
+    if (a.published === false) slugs.delete(a.slug);
+    else slugs.add(a.slug);
+  }
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

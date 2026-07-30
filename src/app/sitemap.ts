@@ -11,13 +11,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/about`, priority: 0.8 },
     { url: `${BASE}/blog/weekly`, priority: 0.8 },
     { url: `${BASE}/shop`, priority: 0.7 },
-    ...articles.map((article) => ({
-      url: `${BASE}/blog/${article.slug}`,
-      priority: 0.6,
-    })),
-    ...customArticles.map((article) => ({
-      url: `${BASE}/blog/${article.slug}`,
-      priority: 0.6,
-    })),
+    ...(() => {
+      // Panel-managed articles override built-ins; drafts stay unlisted.
+      const slugs = new Set(articles.map((article) => article.slug));
+      for (const a of customArticles) {
+        if (a.published === false) slugs.delete(a.slug);
+        else slugs.add(a.slug);
+      }
+      return [...slugs].map((slug) => ({
+        url: `${BASE}/blog/${slug}`,
+        priority: 0.6,
+      }));
+    })(),
   ];
 }

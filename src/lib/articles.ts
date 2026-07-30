@@ -211,6 +211,7 @@ export type CustomArticle = {
   body: string;
   ratingScore?: string;
   ratingText?: string;
+  published?: boolean; // false = draft, hidden from the site; default true
 };
 
 // Body format: "## " starts a section heading, "* " is a bullet

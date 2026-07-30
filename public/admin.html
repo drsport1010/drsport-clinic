@@ -155,7 +155,7 @@
         <!-- BLOG TAB -->
         <div class="tab-pane fade" id="tab-blog">
           <h5 class="mb-2" style="color:#F0F4FF;">מאמרים בבלוג</h5>
-          <p style="color:#8BA4C8; font-size:0.85rem;">4 המאמרים הקבועים (ACL, אכילס, המסטרינג, שברי מאמץ) מנוהלים בנפרד - לעריכה שלהם כתבו לנו. כאן מוסיפים מאמרים חדשים שיופיעו אוטומטית בבלוג שבעמוד הבית.</p>
+          <p style="color:#8BA4C8; font-size:0.85rem;">כל מאמרי האתר מנוהלים כאן: עריכה, סדר התצוגה (החיצים ▲▼ - העליון ברשימה מופיע ראשון בבלוג), ופרסום/טיוטה (טיוטה נשמרת אך לא מוצגת באתר). העדכון השבועי מנוהל בנפרד ותמיד מופיע ראשון.</p>
           <div class="athlete-card" style="font-size:0.8rem; color:#8BA4C8;">
             <strong style="color:#00E676;">מדריך כתיבת תוכן המאמר:</strong><br/>
             · שורה שמתחילה ב-<code>##</code> ורווח = כותרת פרק<br/>
@@ -319,6 +319,7 @@
       if (!obj.title || !obj.title.trim()) return;
       obj.slug = (obj.slug || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
       if (!obj.slug) obj.slug = 'article-' + (idx + 1) + '-' + Date.now().toString(36);
+      obj.published = obj.published !== 'false';
       data.articles.push(obj);
     });
     data.about = {
@@ -474,15 +475,31 @@
     document.getElementById('reasons-items').appendChild(div);
   }
 
+  function moveCard(btn, dir) {
+    const card = btn.closest('.athlete-card');
+    const sib = dir < 0 ? card.previousElementSibling : card.nextElementSibling;
+    if (!sib) return;
+    if (dir < 0) sib.before(card); else sib.after(card);
+  }
+
   function addArticleRow(a) {
     a = a || {};
+    const isDraft = a.published === false;
     const div = document.createElement('div');
     div.className = 'athlete-card';
     div.dataset.type = 'article';
     div.innerHTML = `
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <strong>${esc(a.title || 'מאמר חדש')}</strong>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.athlete-card').remove()">מחק</button>
+        <div class="d-flex gap-2 align-items-center">
+          <button type="button" class="btn btn-outline-light btn-sm" title="הזז למעלה" onclick="moveCard(this, -1)">▲</button>
+          <button type="button" class="btn btn-outline-light btn-sm" title="הזז למטה" onclick="moveCard(this, 1)">▼</button>
+          <select class="form-select form-select-sm w-auto" data-field="published">
+            <option value="true"${isDraft ? '' : ' selected'}>✅ מפורסם</option>
+            <option value="false"${isDraft ? ' selected' : ''}>📝 טיוטה (מוסתר)</option>
+          </select>
+          <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.athlete-card').remove()">מחק</button>
+        </div>
       </div>
       <div class="mb-2"><label class="form-label">כותרת המאמר</label><input type="text" class="form-control" data-field="title" value="${esc(a.title)}" /></div>
       <div class="row g-2 mb-2">

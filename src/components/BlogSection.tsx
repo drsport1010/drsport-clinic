@@ -48,9 +48,14 @@ export default function BlogSection() {
   const latestWeekly = [...(weeklyUpdates || [])].sort((a, b) =>
     a.id < b.id ? 1 : -1
   )[0];
+  // Panel-managed articles drive order and visibility; the hardcoded
+  // defaults only fill in for slugs the panel doesn't manage (fallback).
+  const visibleCustom = (customArticles || []).filter(
+    (c) => c.published !== false
+  );
+  const customSlugs = new Set((customArticles || []).map((c) => c.slug));
   const articles = [
-    ...defaultArticles,
-    ...(customArticles || []).map((c) => ({
+    ...visibleCustom.map((c) => ({
       slug: c.slug,
       category: c.category || "כללי",
       categoryColor: c.categoryColor || "#2B57B8",
@@ -58,6 +63,7 @@ export default function BlogSection() {
       title: c.title,
       excerpt: customExcerpt(c),
     })),
+    ...defaultArticles.filter((d) => !customSlugs.has(d.slug)),
   ];
   return (
     <section
