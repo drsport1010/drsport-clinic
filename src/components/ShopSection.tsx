@@ -23,6 +23,10 @@ const productImages = [
   { src: `${BASE}/scrub-catalog.jpg`, alt: "חולצת סקראבס DR Sport - קטלוג" },
 ];
 
+const cupImages = [
+  { src: `${BASE}/cup-1.jpg`, alt: "כוס רוח חשמלית - Dr. Sport - שני מצבי פעולה" },
+];
+
 const sizingChart = [
   { size: "XS", chest: "84-88", waist: "66-70", length: "110" },
   { size: "S", chest: "88-92", waist: "70-74", length: "112" },
@@ -45,6 +49,7 @@ export default function ShopSection() {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [showSizing, setShowSizing] = useState(false);
   const [cupQty, setCupQty] = useState(1);
+  const [cupActiveImage, setCupActiveImage] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const goToCheckout = () => router.push("/shop/checkout");
@@ -446,16 +451,48 @@ export default function ShopSection() {
           }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div
-              className="rounded-2xl overflow-hidden"
-              style={{ border: "1px solid rgba(43,87,184,0.4)", background: "#f8f8f8" }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`${BASE}/cup-product.svg`}
-                alt="כוס רוח חשמלית - Dr. Sport"
-                style={{ width: "100%", height: "auto", display: "block" }}
-              />
+            <div className="flex flex-col gap-3">
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ border: "1px solid rgba(43,87,184,0.4)", background: "#f8f8f8" }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cupImages[cupActiveImage].src}
+                  alt={cupImages[cupActiveImage].alt}
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
+              </div>
+              {cupImages.length > 1 && (
+                <div className="flex gap-3 overflow-x-auto pb-1">
+                  {cupImages.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCupActiveImage(i)}
+                      style={{
+                        flex: "0 0 80px",
+                        height: "80px",
+                        borderRadius: "12px",
+                        overflow: "hidden",
+                        border:
+                          cupActiveImage === i
+                            ? "2px solid var(--accent)"
+                            : "2px solid rgba(43,87,184,0.3)",
+                        background: "#f8f8f8",
+                        cursor: "pointer",
+                        padding: 0,
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img.src}
+                        alt={img.alt}
+                        style={{ width: "80px", height: "80px", objectFit: "cover", display: "block" }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-5 text-right">
               <div>
