@@ -132,6 +132,9 @@
             <div class="col-12"><label class="form-label">תת-כותרת</label><input type="text" class="form-control" id="shop-subtitle" /></div>
             <div class="col-md-8"><label class="form-label">שם המוצר</label><input type="text" class="form-control" id="shop-productName" /></div>
             <div class="col-md-4"><label class="form-label">עלות משלוח</label><input type="text" class="form-control" id="shop-shippingCost" /></div>
+            <div class="col-md-6"><label class="form-label">קישור תשלום - סקראבס</label><input type="text" class="form-control" id="shop-paymentLinkScrubs" dir="ltr" placeholder="https://..." /></div>
+            <div class="col-md-6"><label class="form-label">קישור תשלום - כוס רוח חשמלית</label><input type="text" class="form-control" id="shop-paymentLinkCup" dir="ltr" placeholder="https://..." /></div>
+            <div class="col-12"><small style="color:#8BA4C8">קישורי התשלום מוצגים ללקוח בסיום ההזמנה בעמוד סיכום ההזמנה. השאירו ריק אם עדיין אין קישור - הלקוח יקבל הודעה שהקישור יישלח אליו.</small></div>
           </div>
           <h5 class="mb-3" style="color:#F0F4FF;">בקרוב בחנות</h5>
           <div id="coming-soon-items"></div>
@@ -298,7 +301,7 @@
       if (obj.title !== undefined) data.treatments.push(obj);
     });
     data.shop = {};
-    ['title','subtitle','productName','price','shippingCost'].forEach(k => {
+    ['title','subtitle','productName','price','shippingCost','paymentLinkScrubs','paymentLinkCup'].forEach(k => {
       const el = document.getElementById('shop-' + k);
       if (el) data.shop[k] = el.value;
     });
@@ -363,7 +366,7 @@
     });
     document.getElementById('treatments-items').innerHTML = '';
     (c.treatments || []).forEach(t => addTreatmentRow(t));
-    ['title','subtitle','productName','price','shippingCost'].forEach(k => {
+    ['title','subtitle','productName','price','shippingCost','paymentLinkScrubs','paymentLinkCup'].forEach(k => {
       const el = document.getElementById('shop-' + k);
       if (el && c.shop) el.value = c.shop[k] || '';
     });

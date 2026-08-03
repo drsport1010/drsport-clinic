@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0D1B35"/>
+  <rect x="20" y="20" width="760" height="560" rx="24" fill="#122447" stroke="#2B57B8" stroke-width="2"/>
+  <!-- cupping device body -->
+  <g>
+    <rect x="330" y="150" width="140" height="200" rx="40" fill="#1A3A7C" stroke="#00E676" stroke-width="4"/>
+    <rect x="355" y="185" width="90" height="60" rx="10" fill="#050E1F" stroke="#2B57B8" stroke-width="2"/>
+    <text x="400" y="223" text-anchor="middle" font-family="Arial" font-size="26" fill="#00E676" font-weight="bold">88</text>
+    <circle cx="400" cy="290" r="18" fill="#00E676"/>
+    <circle cx="360" cy="290" r="10" fill="#2B57B8"/>
+    <circle cx="440" cy="290" r="10" fill="#2B57B8"/>
+    <!-- suction cup base -->
+    <path d="M320 350 Q320 400 400 400 Q480 400 480 350 Z" fill="#8BA4C8" opacity="0.85"/>
+    <ellipse cx="400" cy="400" rx="85" ry="16" fill="#6B7F9E"/>
+  </g>
+  <text x="400" y="470" text-anchor="middle" font-family="Arial" font-size="34" fill="#F0F4FF" font-weight="bold">כוס רוח חשמלית</text>
+  <text x="400" y="510" text-anchor="middle" font-family="Arial" font-size="22" fill="#8BA4C8">Dr. Sport™ - תמונות המוצר בקרוב</text>
+</svg>

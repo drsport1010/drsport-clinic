@@ -47,6 +47,8 @@ const defaultContent = {
     productName: "חולצת סקראבס עם רקימה + מכנסי סקראבס Dr. Sport™",
     price: "₪239",
     shippingCost: "30",
+    paymentLinkScrubs: "",
+    paymentLinkCup: "",
     comingSoon: [
       { name: "גרביי דחיסה - ספורטמד™", price: "₪149" },
       { name: "כפפות פיזיותרפיה - FlexGrip™", price: "₪229" },

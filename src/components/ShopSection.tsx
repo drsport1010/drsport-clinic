@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { saveOrder, setLogoFile as storeLogoFile } from "@/lib/cart";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -36,22 +38,62 @@ const comingSoon = [
 ];
 
 export default function ShopSection() {
+  const router = useRouter();
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [activeImage, setActiveImage] = useState(0);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [showSizing, setShowSizing] = useState(false);
+  const [cupQty, setCupQty] = useState(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const goToCheckout = () => router.push("/shop/checkout");
 
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert("אנא בחר מידה לפני הוספה לסל");
       return;
     }
-    const logoNote = logoFile ? ` + לוגו: ${logoFile.name}` : "";
-    alert(
-      `נוסף לסל! חולצת סקראבס עם רקימה + מכנסים Dr. Sport™ - מידה ${selectedSize} - ${colors[selectedColor].label}${logoNote} - ₪239 + משלוח ₪30`
-    );
+    storeLogoFile(logoFile);
+    const order = {
+      product: "scrubs" as const,
+      name: "חולצת סקראבס עם רקימה + מכנסי סקראבס Dr. Sport™",
+      price: 239,
+      shipping: 30,
+      color: colors[selectedColor].label,
+      size: selectedSize,
+      qty: 1,
+      logoName: logoFile?.name,
+    };
+    // Small logos get a dataURL backup so the checkout preview survives a
+    // refresh; bigger ones ride only on the in-memory File (sessionStorage quota).
+    if (logoFile && logoFile.size <= 2.5 * 1024 * 1024) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        saveOrder({ ...order, logoDataUrl: String(reader.result) });
+        goToCheckout();
+      };
+      reader.onerror = () => {
+        saveOrder(order);
+        goToCheckout();
+      };
+      reader.readAsDataURL(logoFile);
+    } else {
+      saveOrder(order);
+      goToCheckout();
+    }
+  };
+
+  const handleAddCupToCart = () => {
+    storeLogoFile(null);
+    saveOrder({
+      product: "cup" as const,
+      name: "כוס רוח חשמלית - Dr. Sport™",
+      price: 120,
+      shipping: 30,
+      qty: cupQty,
+    });
+    goToCheckout();
   };
 
   return (
@@ -391,6 +433,94 @@ export default function ShopSection() {
                   </table>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Product 2: Electric Cupping Cup */}
+        <div
+          className="mt-14 rounded-3xl p-6 md:p-8"
+          style={{
+            background: "rgba(13,27,53,0.6)",
+            border: "1px solid rgba(43,87,184,0.35)",
+          }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{ border: "1px solid rgba(43,87,184,0.4)", background: "#f8f8f8" }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`${BASE}/cup-product.svg`}
+                alt="כוס רוח חשמלית - Dr. Sport"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>
+            <div className="flex flex-col gap-5 text-right">
+              <div>
+                <h3 className="text-2xl font-extrabold mb-1" style={{ color: "#F0F4FF" }}>
+                  כוס רוח חשמלית - Dr. Sport™
+                </h3>
+                <div className="flex items-baseline gap-3 mt-2">
+                  <span className="text-3xl font-extrabold" style={{ color: "var(--accent)" }}>
+                    ₪120
+                  </span>
+                  <span className="text-sm" style={{ color: "#8BA4C8" }}>
+                    + משלוח ₪30
+                  </span>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: "#8BA4C8" }}>
+                כוס רוח (כוסות רוח) חשמלית מודרנית לטיפול עצמי בבית - שחרור שרירים
+                תפוסים, שיפור זרימת הדם והקלה על כאבי שרירים לאחר אימון. עוצמות שאיבה
+                מתכווננות, נטענת USB וקלה לשימוש. מגיעה עם הוראות שימוש מלאות.
+              </p>
+              <div className="flex items-center gap-3 justify-end">
+                <span className="text-sm font-semibold" style={{ color: "#F0F4FF" }}>
+                  כמות:
+                </span>
+                <div
+                  className="flex items-center rounded-lg overflow-hidden"
+                  style={{ border: "1px solid rgba(43,87,184,0.4)" }}
+                >
+                  <button
+                    onClick={() => setCupQty(Math.max(1, cupQty - 1))}
+                    className="px-4 py-2 font-bold"
+                    style={{ color: "#8BA4C8", background: "rgba(43,87,184,0.2)" }}
+                  >
+                    -
+                  </button>
+                  <span
+                    className="px-5 py-2 font-bold"
+                    style={{ color: "#F0F4FF", minWidth: "48px", textAlign: "center" }}
+                  >
+                    {cupQty}
+                  </span>
+                  <button
+                    onClick={() => setCupQty(Math.min(10, cupQty + 1))}
+                    className="px-4 py-2 font-bold"
+                    style={{ color: "#8BA4C8", background: "rgba(43,87,184,0.2)" }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <button
+                onClick={handleAddCupToCart}
+                className="w-full py-4 rounded-xl text-base font-extrabold tracking-wide transition-all duration-200"
+                style={{ background: "var(--accent)", color: "#050E1F" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--accent-dark)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "var(--accent)";
+                  e.currentTarget.style.transform = "none";
+                }}
+              >
+                🛒 הוסף לסל
+              </button>
             </div>
           </div>
         </div>

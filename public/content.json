@@ -203,7 +203,9 @@
         "name": "כפפות פיזיותרפיה - FlexGrip™",
         "price": "₪229"
       }
-    ]
+    ],
+    "paymentLinkScrubs": "",
+    "paymentLinkCup": ""
   },
   "contact": {
     "title": "בואו נדבר",

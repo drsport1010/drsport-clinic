@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/about`, priority: 0.8 },
     { url: `${BASE}/blog/weekly`, priority: 0.8 },
     { url: `${BASE}/shop`, priority: 0.7 },
+    { url: `${BASE}/terms`, priority: 0.3 },
     ...(() => {
       // Panel-managed articles override built-ins; drafts stay unlisted.
       const slugs = new Set(articles.map((article) => article.slug));
