@@ -205,6 +205,79 @@
         "name": "כפפות פיזיותרפיה - FlexGrip™",
         "price": "₪229"
       }
+    ],
+    "products": [
+      {
+        "id": "scrubs",
+        "name": "חולצת סקראבס עם רקימה + מכנסי סקראבס Dr. Sport™",
+        "description": "סקראבס מקצועיים המשלבים טכנולוגיית ניהול לחות מתקדמת עם עיצוב ספורטיבי ארגונומי. מיועדים לרופאים, אחיות, ופיזיותרפיסטים הפועלים שעות ארוכות. נוחות מרבית, עמידות גבוהה, וסגנון שמדבר בשבחי הרפואה המודרנית.",
+        "price": 239,
+        "shipping": 30,
+        "images": [
+          "/scrub-main.jpg",
+          "/scrub-colors.jpg",
+          "/scrub-catalog.jpg"
+        ],
+        "colors": [
+          {
+            "label": "כחול נייבי",
+            "value": "#1A3A7C"
+          },
+          {
+            "label": "שחור",
+            "value": "#111827"
+          },
+          {
+            "label": "ירוק",
+            "value": "#1B5E3B"
+          },
+          {
+            "label": "לבן",
+            "value": "#F0F4FF"
+          },
+          {
+            "label": "אפור",
+            "value": "#6B7280"
+          },
+          {
+            "label": "טיל",
+            "value": "#0D7377"
+          }
+        ],
+        "sizes": [
+          "XS",
+          "S",
+          "M",
+          "L",
+          "XL",
+          "XXL"
+        ],
+        "logoUpload": true,
+        "sizeChart": true,
+        "maxQty": 1,
+        "paymentLink": "",
+        "published": true
+      },
+      {
+        "id": "cup",
+        "name": "כוס רוח חשמלית - Dr. Sport™",
+        "description": "כוס רוח (כוסות רוח) חשמלית מודרנית לטיפול עצמי בבית - שחרור שרירים תפוסים, שיפור זרימת הדם והקלה על כאבי שרירים לאחר אימון. עוצמות שאיבה מתכווננות, נטענת USB וקלה לשימוש. מגיעה עם הוראות שימוש מלאות.",
+        "price": 120,
+        "shipping": 30,
+        "images": [
+          "/cup-3.jpg",
+          "/cup-2.jpg",
+          "/cup-1.jpg",
+          "/cup-4.jpg"
+        ],
+        "colors": [],
+        "sizes": [],
+        "logoUpload": false,
+        "sizeChart": false,
+        "maxQty": 10,
+        "paymentLink": "",
+        "published": true
+      }
     ]
   },
   "contact": {

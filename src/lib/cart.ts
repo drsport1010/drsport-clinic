@@ -2,6 +2,7 @@
 
 export type ShopOrder = {
   product: "scrubs" | "cup";
+  productId?: string;
   name: string;
   price: number;
   shipping: number;

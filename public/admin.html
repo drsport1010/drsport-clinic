@@ -128,14 +128,16 @@
           <h5 class="mb-3" style="color:#F0F4FF;">החנות</h5>
           <div class="row g-3 mb-4">
             <div class="col-md-6"><label class="form-label">כותרת החנות</label><input type="text" class="form-control" id="shop-title" /></div>
-            <div class="col-md-6"><label class="form-label">מחיר מוצר</label><input type="text" class="form-control" id="shop-price" /></div>
-            <div class="col-12"><label class="form-label">תת-כותרת</label><input type="text" class="form-control" id="shop-subtitle" /></div>
-            <div class="col-md-8"><label class="form-label">שם המוצר</label><input type="text" class="form-control" id="shop-productName" /></div>
-            <div class="col-md-4"><label class="form-label">עלות משלוח</label><input type="text" class="form-control" id="shop-shippingCost" /></div>
-            <div class="col-md-6"><label class="form-label">קישור תשלום - סקראבס</label><input type="text" class="form-control" id="shop-paymentLinkScrubs" dir="ltr" placeholder="https://..." /></div>
-            <div class="col-md-6"><label class="form-label">קישור תשלום - כוס רוח חשמלית</label><input type="text" class="form-control" id="shop-paymentLinkCup" dir="ltr" placeholder="https://..." /></div>
-            <div class="col-12"><small style="color:#8BA4C8">קישורי התשלום מוצגים ללקוח בסיום ההזמנה בעמוד סיכום ההזמנה. השאירו ריק אם עדיין אין קישור - הלקוח יקבל הודעה שהקישור יישלח אליו.</small></div>
+            <div class="col-md-6"><label class="form-label">תת-כותרת</label><input type="text" class="form-control" id="shop-subtitle" /></div>
           </div>
+          <h5 class="mb-2" style="color:#F0F4FF;">מוצרים</h5>
+          <p class="mb-3" style="color:#8BA4C8; font-size:0.85rem;">
+            כל מוצר מקבל כרטיס משלו: מחיר, משלוח, תמונות (אפשר להעלות ישירות), מידות, צבעים וקישור תשלום.
+            הסדר כאן = הסדר באתר. מוצר במצב "טיוטה" מוסתר מהאתר. קישור התשלום מוצג ללקוח אחרי שליחת ההזמנה - אם ריק, הלקוח יקבל הודעה שהקישור יישלח אליו.
+          </p>
+          <div id="products-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm mt-2 mb-4" onclick="addProductRow()">+ הוסף מוצר</button>
+          <hr class="section-divider" />
           <h5 class="mb-3" style="color:#F0F4FF;">בקרוב בחנות</h5>
           <div id="coming-soon-items"></div>
           <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="addComingRow()">+ הוסף פריט</button>
@@ -300,11 +302,43 @@
       card.querySelectorAll('[data-field]').forEach(el => { obj[el.dataset.field] = el.value; });
       if (obj.title !== undefined) data.treatments.push(obj);
     });
-    data.shop = {};
-    ['title','subtitle','productName','price','shippingCost','paymentLinkScrubs','paymentLinkCup'].forEach(k => {
+    data.shop = Object.assign({}, (_content && _content.shop) || {});
+    ['title','subtitle'].forEach(k => {
       const el = document.getElementById('shop-' + k);
       if (el) data.shop[k] = el.value;
     });
+    data.shop.products = [];
+    document.querySelectorAll('.athlete-card[data-type="product"]').forEach((card, idx) => {
+      const obj = {};
+      card.querySelectorAll('[data-field]').forEach(el => { obj[el.dataset.field] = el.value; });
+      if (!obj.name || !obj.name.trim()) return;
+      obj.id = (obj.id || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
+      if (!obj.id) obj.id = 'product-' + (idx + 1) + '-' + Date.now().toString(36);
+      obj.price = parseFloat(obj.price) || 0;
+      obj.shipping = parseFloat(obj.shipping) || 0;
+      obj.maxQty = parseInt(obj.maxQty) || 1;
+      obj.images = (obj.images || '').split('\n').map(s => s.trim()).filter(Boolean);
+      obj.sizes = (obj.sizes || '').split(',').map(s => s.trim()).filter(Boolean);
+      obj.colors = (obj.colors || '').split('\n').map(s => s.trim()).filter(Boolean).map(line => {
+        const parts = line.split('|').map(x => x.trim());
+        return { label: parts[0] || '', value: parts[1] || '#1A3A7C' };
+      });
+      obj.logoUpload = obj.logoUpload === 'true';
+      obj.sizeChart = obj.sizeChart === 'true';
+      obj.published = obj.published !== 'false';
+      data.shop.products.push(obj);
+    });
+    // Legacy shop-level fields stay in sync so pre-products code keeps working.
+    const scrubsP = data.shop.products.find(p => p.id === 'scrubs');
+    const cupP = data.shop.products.find(p => p.id === 'cup');
+    const firstP = scrubsP || data.shop.products[0];
+    if (firstP) {
+      data.shop.productName = firstP.name;
+      data.shop.price = '₪' + firstP.price;
+      data.shop.shippingCost = String(firstP.shipping);
+    }
+    data.shop.paymentLinkScrubs = (scrubsP && scrubsP.paymentLink) || '';
+    data.shop.paymentLinkCup = (cupP && cupP.paymentLink) || '';
     data.shop.comingSoon = [];
     document.querySelectorAll('.coming-row').forEach(row => {
       data.shop.comingSoon.push({ name: row.querySelector('.coming-name').value, price: row.querySelector('.coming-price').value });
@@ -366,10 +400,12 @@
     });
     document.getElementById('treatments-items').innerHTML = '';
     (c.treatments || []).forEach(t => addTreatmentRow(t));
-    ['title','subtitle','productName','price','shippingCost','paymentLinkScrubs','paymentLinkCup'].forEach(k => {
+    ['title','subtitle'].forEach(k => {
       const el = document.getElementById('shop-' + k);
       if (el && c.shop) el.value = c.shop[k] || '';
     });
+    document.getElementById('products-items').innerHTML = '';
+    (((c.shop || {}).products) || []).forEach(p => addProductRow(p));
     document.getElementById('coming-soon-items').innerHTML = '';
     ((c.shop || {}).comingSoon || []).forEach(item => addComingRow(item));
     ['title','subtitle','phone','responseTime'].forEach(k => {
@@ -518,6 +554,105 @@
         <div class="col-md-9"><label class="form-label">הסבר המדד</label><input type="text" class="form-control" data-field="ratingText" value="${esc(a.ratingText)}" /></div>
       </div>`;
     document.getElementById('articles-items').appendChild(div);
+  }
+
+  function addProductRow(p) {
+    p = p || {};
+    const isDraft = p.published === false;
+    const colorsText = (p.colors || []).map(c => (c.label || '') + ' | ' + (c.value || '')).join('\n');
+    const div = document.createElement('div');
+    div.className = 'athlete-card';
+    div.dataset.type = 'product';
+    div.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <strong>${esc(p.name || 'מוצר חדש')}</strong>
+        <div class="d-flex gap-2 align-items-center">
+          <button type="button" class="btn btn-outline-light btn-sm" title="הזז למעלה" onclick="moveCard(this, -1)">▲</button>
+          <button type="button" class="btn btn-outline-light btn-sm" title="הזז למטה" onclick="moveCard(this, 1)">▼</button>
+          <select class="form-select form-select-sm w-auto" data-field="published">
+            <option value="true"${isDraft ? '' : ' selected'}>✅ מפורסם</option>
+            <option value="false"${isDraft ? ' selected' : ''}>📝 טיוטה (מוסתר)</option>
+          </select>
+          <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.athlete-card').remove()">מחק</button>
+        </div>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-8"><label class="form-label">שם המוצר</label><input type="text" class="form-control" data-field="name" value="${esc(p.name)}" /></div>
+        <div class="col-md-4"><label class="form-label">מזהה (באנגלית, לא לשנות)</label><input type="text" class="form-control" data-field="id" value="${esc(p.id)}" dir="ltr" placeholder="new-product" /></div>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-3"><label class="form-label">מחיר (₪)</label><input type="number" class="form-control" data-field="price" value="${p.price != null ? p.price : ''}" /></div>
+        <div class="col-md-3"><label class="form-label">משלוח (₪)</label><input type="number" class="form-control" data-field="shipping" value="${p.shipping != null ? p.shipping : 30}" /></div>
+        <div class="col-md-3"><label class="form-label">כמות מקסימלית להזמנה</label><input type="number" class="form-control" data-field="maxQty" value="${p.maxQty || 1}" min="1" /></div>
+        <div class="col-md-3"><label class="form-label">קישור תשלום</label><input type="text" class="form-control" data-field="paymentLink" value="${esc(p.paymentLink)}" dir="ltr" placeholder="https://..." /></div>
+      </div>
+      <div class="mb-2"><label class="form-label">תיאור המוצר</label><textarea class="form-control" data-field="description" rows="3">${esc(p.description)}</textarea></div>
+      <div class="mb-2">
+        <label class="form-label">תמונות (כתובת אחת בכל שורה - הראשונה היא הראשית)</label>
+        <textarea class="form-control" data-field="images" rows="3" dir="ltr">${esc((p.images || []).join('\n'))}</textarea>
+        <div class="d-flex align-items-center gap-2 mt-2">
+          <button type="button" class="btn btn-outline-success btn-sm" onclick="uploadProductImage(this)">📤 העלה תמונה</button>
+          <small style="color:#8BA4C8">התמונה מועלית לאתר והכתובת שלה נוספת לרשימה אוטומטית (עד 4MB)</small>
+          <input type="file" class="product-upload-input" accept="image/*" style="display:none" />
+        </div>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-6"><label class="form-label">מידות (מופרד בפסיקים, ריק = בלי בחירת מידה)</label><input type="text" class="form-control" data-field="sizes" value="${esc((p.sizes || []).join(', '))}" placeholder="S, M, L, XL" /></div>
+        <div class="col-md-6"><label class="form-label">צבעים (שורה לכל צבע: שם | קוד-צבע, ריק = בלי)</label><textarea class="form-control" data-field="colors" rows="2" placeholder="כחול נייבי | #1A3A7C">${esc(colorsText)}</textarea></div>
+      </div>
+      <div class="row g-2">
+        <div class="col-md-6"><label class="form-label">העלאת לוגו לרקימה בעמוד המוצר</label>
+          <select class="form-select" data-field="logoUpload">
+            <option value="false"${p.logoUpload ? '' : ' selected'}>לא</option>
+            <option value="true"${p.logoUpload ? ' selected' : ''}>כן</option>
+          </select>
+        </div>
+        <div class="col-md-6"><label class="form-label">הצגת טבלת מידות (סקראבס)</label>
+          <select class="form-select" data-field="sizeChart">
+            <option value="false"${p.sizeChart ? '' : ' selected'}>לא</option>
+            <option value="true"${p.sizeChart ? ' selected' : ''}>כן</option>
+          </select>
+        </div>
+      </div>`;
+    document.getElementById('products-items').appendChild(div);
+  }
+
+  function uploadProductImage(btn) {
+    const card = btn.closest('.athlete-card');
+    const input = card.querySelector('.product-upload-input');
+    input.onchange = async () => {
+      const file = input.files && input.files[0];
+      input.onchange = null;
+      if (!file) return;
+      if (file.size > 4 * 1024 * 1024) { showMsg('הקובץ גדול מדי - מקסימום 4MB', 'error'); input.value = ''; return; }
+      btn.disabled = true;
+      const orig = btn.textContent;
+      btn.textContent = 'מעלה...';
+      try {
+        const data = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(r.result);
+          r.onerror = rej;
+          r.readAsDataURL(file);
+        });
+        const resp = await fetch('/api/admin/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _token },
+          body: JSON.stringify({ filename: file.name, data }),
+        });
+        const out = await resp.json();
+        if (!resp.ok || !out.url) throw new Error('upload failed');
+        const ta = card.querySelector('[data-field="images"]');
+        ta.value = (ta.value.trim() ? ta.value.trim() + '\n' : '') + out.url;
+        showMsg('התמונה הועלתה והכתובת נוספה - אל תשכחו ללחוץ "שמור שינויים". התמונה תופיע באתר תוך כדקה.', 'success');
+      } catch (e) {
+        showMsg('שגיאה בהעלאת התמונה', 'error');
+      }
+      btn.disabled = false;
+      btn.textContent = orig;
+      input.value = '';
+    };
+    input.click();
   }
 
   function addAboutParaRow(val) {

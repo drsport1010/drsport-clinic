@@ -60,12 +60,18 @@ export default function CheckoutClient() {
     setLoaded(true);
   }, []);
 
-  const shop = content.shop as Record<string, unknown>;
-  const paymentLink = order
-    ? String(
-        (order.product === "cup" ? shop.paymentLinkCup : shop.paymentLinkScrubs) || ""
-      ).trim()
-    : "";
+  const shop = content.shop as Record<string, unknown> & {
+    products?: { id: string; paymentLink?: string }[];
+  };
+  // Per-product payment link from the products array; legacy shop-level
+  // fields remain as fallback for orders saved before the products model.
+  const productLink = order?.productId
+    ? (shop.products || []).find((p) => p.id === order.productId)?.paymentLink
+    : undefined;
+  const legacyLink = order
+    ? (order.product === "cup" ? shop.paymentLinkCup : shop.paymentLinkScrubs)
+    : undefined;
+  const paymentLink = String(productLink || legacyLink || "").trim();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

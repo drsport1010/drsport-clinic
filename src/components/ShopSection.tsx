@@ -2,33 +2,26 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useContent } from "@/lib/useContent";
 import { saveOrder, setLogoFile as storeLogoFile } from "@/lib/cart";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
-
-const colors = [
-  { label: "כחול נייבי", value: "#1A3A7C" },
-  { label: "שחור", value: "#111827" },
-  { label: "ירוק", value: "#1B5E3B" },
-  { label: "לבן", value: "#F0F4FF" },
-  { label: "אפור", value: "#6B7280" },
-  { label: "טיל", value: "#0D7377" },
-];
-
-const productImages = [
-  { src: `${BASE}/scrub-main.jpg`, alt: "חולצת סקראבס DR Sport - כחול נייבי" },
-  { src: `${BASE}/scrub-colors.jpg`, alt: "חולצת סקראבס DR Sport - 6 צבעים" },
-  { src: `${BASE}/scrub-catalog.jpg`, alt: "חולצת סקראבס DR Sport - קטלוג" },
-];
-
-const cupImages = [
-  { src: `${BASE}/cup-3.jpg`, alt: "כוס רוח חשמלית - Dr. Sport - טיפול עצמי בבית" },
-  { src: `${BASE}/cup-2.jpg`, alt: "כוס רוח חשמלית - Dr. Sport" },
-  { src: `${BASE}/cup-1.jpg`, alt: "כוס רוח חשמלית - Dr. Sport - שני מצבי פעולה" },
-  { src: `${BASE}/cup-4.jpg`, alt: "כוס רוח חשמלית - Dr. Sport - טעינת USB-C" },
-];
+export type ShopProduct = {
+  id: string;
+  name: string;
+  description?: string;
+  price: number | string;
+  shipping: number | string;
+  images?: string[];
+  colors?: { label: string; value: string }[];
+  sizes?: string[];
+  logoUpload?: boolean;
+  sizeChart?: boolean;
+  maxQty?: number | string;
+  paymentLink?: string;
+  published?: boolean;
+};
 
 const sizingChart = [
   { size: "XS", chest: "84-88", waist: "66-70", length: "110" },
@@ -39,103 +32,74 @@ const sizingChart = [
   { size: "XXL", chest: "104-108", waist: "86-90", length: "120" },
 ];
 
-const comingSoon = [
-  { name: "גרביי דחיסה - ספורטמד™", price: "₪149" },
-  { name: "כפפות פיזיותרפיה - FlexGrip™", price: "₪229" },
-];
+const imgSrc = (path: string) => (path.startsWith("/") ? `${BASE}${path}` : path);
 
-export default function ShopSection() {
+function ProductCard({ product }: { product: ShopProduct }) {
   const router = useRouter();
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [activeImage, setActiveImage] = useState(0);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [showSizing, setShowSizing] = useState(false);
-  const [cupQty, setCupQty] = useState(1);
-  const [cupActiveImage, setCupActiveImage] = useState(0);
+  const [qty, setQty] = useState(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const goToCheckout = () => router.push("/shop/checkout");
+  const colors = product.colors || [];
+  const sizes = product.sizes || [];
+  const images = (product.images || []).filter(Boolean);
+  const price = Number(product.price) || 0;
+  const shipping = Number(product.shipping) || 0;
+  const maxQty = Math.max(1, Number(product.maxQty) || 1);
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
+    if (sizes.length && !selectedSize) {
       alert("אנא בחר מידה לפני הוספה לסל");
       return;
     }
-    storeLogoFile(logoFile);
+    storeLogoFile(product.logoUpload ? logoFile : null);
     const order = {
-      product: "scrubs" as const,
-      name: "חולצת סקראבס עם רקימה + מכנסי סקראבס Dr. Sport™",
-      price: 239,
-      shipping: 30,
-      color: colors[selectedColor].label,
-      size: selectedSize,
-      qty: 1,
-      logoName: logoFile?.name,
+      product: product.id === "cup" ? ("cup" as const) : ("scrubs" as const),
+      productId: product.id,
+      name: product.name,
+      price,
+      shipping,
+      color: colors.length ? colors[selectedColor]?.label : undefined,
+      size: selectedSize || undefined,
+      qty,
+      logoName: product.logoUpload ? logoFile?.name : undefined,
     };
+    const go = () => router.push("/shop/checkout");
     // Small logos get a dataURL backup so the checkout preview survives a
     // refresh; bigger ones ride only on the in-memory File (sessionStorage quota).
-    if (logoFile && logoFile.size <= 2.5 * 1024 * 1024) {
+    if (product.logoUpload && logoFile && logoFile.size <= 2.5 * 1024 * 1024) {
       const reader = new FileReader();
       reader.onload = () => {
         saveOrder({ ...order, logoDataUrl: String(reader.result) });
-        goToCheckout();
+        go();
       };
       reader.onerror = () => {
         saveOrder(order);
-        goToCheckout();
+        go();
       };
       reader.readAsDataURL(logoFile);
     } else {
       saveOrder(order);
-      goToCheckout();
+      go();
     }
   };
 
-  const handleAddCupToCart = () => {
-    storeLogoFile(null);
-    saveOrder({
-      product: "cup" as const,
-      name: "כוס רוח חשמלית - Dr. Sport™",
-      price: 120,
-      shipping: 30,
-      qty: cupQty,
-    });
-    goToCheckout();
-  };
-
   return (
-    <section
-      id="shop"
-      className="section-pad"
-      style={{ background: "#0D1B35" }}
+    <div
+      className="rounded-3xl p-6 md:p-8 mb-10"
+      style={{
+        background: "rgba(13,27,53,0.6)",
+        border: "1px solid rgba(43,87,184,0.35)",
+      }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mb-12 text-right">
-          <h2
-            className="text-3xl md:text-4xl font-extrabold mb-2"
-            style={{ color: "#F0F4FF" }}
-          >
-            החנות של ד״ר ספורט
-          </h2>
-          <p className="text-base" style={{ color: "#8BA4C8" }}>
-            מדי סקראבס ספורטיביים לאנשי רפואה - בגדי עבודה לרופאים ואנשי רפואה
-          </p>
-          <div
-            className="h-1 rounded-full mt-3"
-            style={{
-              background: "linear-gradient(90deg, transparent, var(--accent))",
-              width: "180px",
-              marginLeft: "auto",
-            }}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-          {/* Image Gallery */}
-          <div className="flex flex-col gap-3">
-            {/* Main Image */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        {/* Image Gallery */}
+        <div className="flex flex-col gap-3">
+          {images.length > 0 && (
             <div
               className="rounded-3xl overflow-hidden"
               style={{
@@ -145,83 +109,74 @@ export default function ShopSection() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={productImages[activeImage].src}
-                alt={productImages[activeImage].alt}
+                src={imgSrc(images[Math.min(activeImage, images.length - 1)])}
+                alt={product.name}
                 style={{ width: "100%", height: "auto", objectFit: "contain", display: "block" }}
               />
             </div>
+          )}
+          {images.length > 1 && (
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {images.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImage(i)}
+                  style={{
+                    flex: "0 0 80px",
+                    height: "80px",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    border:
+                      activeImage === i
+                        ? "2px solid var(--accent)"
+                        : "2px solid rgba(43,87,184,0.3)",
+                    background: "#f8f8f8",
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imgSrc(img)}
+                    alt={`${product.name} - תמונה ${i + 1}`}
+                    style={{ width: "80px", height: "80px", objectFit: "cover", display: "block" }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
-            {/* Thumbnail Row - scrollable */}
-            {productImages.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-1">
-                {productImages.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImage(i)}
-                    style={{
-                      flex: "0 0 80px",
-                      height: "80px",
-                      borderRadius: "12px",
-                      overflow: "hidden",
-                      border:
-                        activeImage === i
-                          ? "2px solid var(--accent)"
-                          : "2px solid rgba(43,87,184,0.3)",
-                      background: "#f8f8f8",
-                      cursor: "pointer",
-                      padding: 0,
-                    }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      style={{ width: "80px", height: "80px", objectFit: "cover", display: "block" }}
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+        {/* Product Details */}
+        <div className="flex flex-col gap-6 text-right">
+          <div>
+            <h3 className="text-2xl font-extrabold mb-1" style={{ color: "#F0F4FF" }}>
+              {product.name}
+            </h3>
+            <div className="flex items-baseline gap-3 mt-2">
+              <span className="text-3xl font-extrabold" style={{ color: "var(--accent)" }}>
+                ₪{price}
+              </span>
+              <span className="text-sm" style={{ color: "#8BA4C8" }}>
+                + משלוח ₪{shipping}
+              </span>
+            </div>
           </div>
 
-          {/* Product Details */}
-          <div className="flex flex-col gap-6">
-            <div>
-              <h3
-                className="text-2xl font-extrabold mb-1"
-                style={{ color: "#F0F4FF" }}
-              >
-                חולצת סקראבס עם רקימה + מכנסי סקראבס - Dr. Sport™
-              </h3>
-              <div className="flex items-baseline gap-3 mt-2">
-                <span
-                  className="text-3xl font-extrabold"
-                  style={{ color: "var(--accent)" }}
-                >
-                  ₪239
-                </span>
-                <span className="text-sm" style={{ color: "#8BA4C8" }}>
-                  + משלוח ₪30
-                </span>
-              </div>
-            </div>
-
+          {product.description && (
             <p className="text-sm leading-relaxed" style={{ color: "#8BA4C8" }}>
-              סקראבס מקצועיים המשלבים טכנולוגיית ניהול לחות מתקדמת עם עיצוב ספורטיבי ארגונומי. מיועדים לרופאים, אחיות, ופיזיותרפיסטים הפועלים שעות ארוכות. נוחות מרבית, עמידות גבוהה, וסגנון שמדבר בשבחי הרפואה המודרנית.
+              {product.description}
             </p>
+          )}
 
-            {/* Color Selector */}
+          {/* Color Selector */}
+          {colors.length > 0 && (
             <div>
-              <p
-                className="text-sm font-semibold mb-3"
-                style={{ color: "#F0F4FF" }}
-              >
+              <p className="text-sm font-semibold mb-3" style={{ color: "#F0F4FF" }}>
                 צבע:{" "}
-                <span style={{ color: "#8BA4C8" }}>
-                  {colors[selectedColor].label}
-                </span>
+                <span style={{ color: "#8BA4C8" }}>{colors[selectedColor]?.label}</span>
               </p>
-              <div className="flex gap-3">
+              <div className="flex gap-3 flex-wrap">
                 {colors.map((color, i) => (
                   <button
                     key={i}
@@ -238,20 +193,18 @@ export default function ShopSection() {
                         selectedColor === i
                           ? "0 0 12px color-mix(in srgb, var(--accent) 40%, transparent)"
                           : "none",
-                      transform:
-                        selectedColor === i ? "scale(1.15)" : "scale(1)",
+                      transform: selectedColor === i ? "scale(1.15)" : "scale(1)",
                     }}
                   />
                 ))}
               </div>
             </div>
+          )}
 
-            {/* Size Selector */}
+          {/* Size Selector */}
+          {sizes.length > 0 && (
             <div>
-              <p
-                className="text-sm font-semibold mb-3"
-                style={{ color: "#F0F4FF" }}
-              >
+              <p className="text-sm font-semibold mb-3" style={{ color: "#F0F4FF" }}>
                 מידה:{" "}
                 {selectedSize ? (
                   <span style={{ color: "var(--accent)" }}>{selectedSize}</span>
@@ -267,9 +220,7 @@ export default function ShopSection() {
                     className="px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200"
                     style={{
                       background:
-                        selectedSize === size
-                          ? "var(--accent)"
-                          : "rgba(43,87,184,0.2)",
+                        selectedSize === size ? "var(--accent)" : "rgba(43,87,184,0.2)",
                       color: selectedSize === size ? "#050E1F" : "#8BA4C8",
                       border:
                         selectedSize === size
@@ -282,13 +233,12 @@ export default function ShopSection() {
                 ))}
               </div>
             </div>
+          )}
 
-            {/* Logo Upload */}
+          {/* Logo Upload */}
+          {product.logoUpload && (
             <div>
-              <p
-                className="text-sm font-semibold mb-2"
-                style={{ color: "#F0F4FF" }}
-              >
+              <p className="text-sm font-semibold mb-2" style={{ color: "#F0F4FF" }}>
                 העלאת לוגו לרקימה{" "}
                 <span className="font-normal" style={{ color: "#8BA4C8" }}>
                   (אופציונלי)
@@ -351,31 +301,64 @@ export default function ShopSection() {
                 }}
               />
             </div>
+          )}
 
-            {/* Add to Cart */}
-            <button
-              onClick={handleAddToCart}
-              className="w-full py-4 rounded-xl text-base font-extrabold tracking-wide transition-all duration-200"
-              style={{
-                background: "var(--accent)",
-                color: "#050E1F",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--accent-dark)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 30px color-mix(in srgb, var(--accent) 40%, transparent)";
-                e.currentTarget.style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "var(--accent)";
-                e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.transform = "none";
-              }}
-            >
-              🛒 הוסף לסל
-            </button>
+          {/* Quantity */}
+          {maxQty > 1 && (
+            <div className="flex items-center gap-3 justify-end">
+              <span className="text-sm font-semibold" style={{ color: "#F0F4FF" }}>
+                כמות:
+              </span>
+              <div
+                className="flex items-center rounded-lg overflow-hidden"
+                style={{ border: "1px solid rgba(43,87,184,0.4)" }}
+              >
+                <button
+                  onClick={() => setQty(Math.max(1, qty - 1))}
+                  className="px-4 py-2 font-bold"
+                  style={{ color: "#8BA4C8", background: "rgba(43,87,184,0.2)" }}
+                >
+                  -
+                </button>
+                <span
+                  className="px-5 py-2 font-bold"
+                  style={{ color: "#F0F4FF", minWidth: "48px", textAlign: "center" }}
+                >
+                  {qty}
+                </span>
+                <button
+                  onClick={() => setQty(Math.min(maxQty, qty + 1))}
+                  className="px-4 py-2 font-bold"
+                  style={{ color: "#8BA4C8", background: "rgba(43,87,184,0.2)" }}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          )}
 
-            {/* Sizing Chart Toggle */}
+          {/* Add to Cart */}
+          <button
+            onClick={handleAddToCart}
+            className="w-full py-4 rounded-xl text-base font-extrabold tracking-wide transition-all duration-200"
+            style={{ background: "var(--accent)", color: "#050E1F" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--accent-dark)";
+              e.currentTarget.style.boxShadow =
+                "0 0 30px color-mix(in srgb, var(--accent) 40%, transparent)";
+              e.currentTarget.style.transform = "translateY(-2px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--accent)";
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.transform = "none";
+            }}
+          >
+            🛒 הוסף לסל
+          </button>
+
+          {/* Sizing Chart Toggle */}
+          {product.sizeChart && (
             <div>
               <button
                 onClick={() => setShowSizing(!showSizing)}
@@ -396,17 +379,15 @@ export default function ShopSection() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr style={{ background: "rgba(43,87,184,0.3)" }}>
-                        {["מידה", 'חזה (ס"מ)', 'מותניים (ס"מ)', 'אורך (ס"מ)'].map(
-                          (h) => (
-                            <th
-                              key={h}
-                              className="py-2 px-3 font-bold text-right"
-                              style={{ color: "#F0F4FF" }}
-                            >
-                              {h}
-                            </th>
-                          )
-                        )}
+                        {["מידה", 'חזה (ס"מ)', 'מותניים (ס"מ)', 'אורך (ס"מ)'].map((h) => (
+                          <th
+                            key={h}
+                            className="py-2 px-3 font-bold text-right"
+                            style={{ color: "#F0F4FF" }}
+                          >
+                            {h}
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
@@ -415,15 +396,10 @@ export default function ShopSection() {
                           key={row.size}
                           style={{
                             background:
-                              i % 2 === 0
-                                ? "rgba(13,27,53,0.8)"
-                                : "rgba(26,58,124,0.15)",
+                              i % 2 === 0 ? "rgba(13,27,53,0.8)" : "rgba(26,58,124,0.15)",
                           }}
                         >
-                          <td
-                            className="py-2 px-3 font-bold"
-                            style={{ color: "var(--accent)" }}
-                          >
+                          <td className="py-2 px-3 font-bold" style={{ color: "var(--accent)" }}>
                             {row.size}
                           </td>
                           <td className="py-2 px-3" style={{ color: "#8BA4C8" }}>
@@ -442,170 +418,92 @@ export default function ShopSection() {
                 </div>
               )}
             </div>
-          </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ShopSection() {
+  const content = useContent();
+  const shop = content.shop as {
+    title?: string;
+    subtitle?: string;
+    products?: ShopProduct[];
+    comingSoon?: { name: string; price: string }[];
+  };
+  const products = (shop.products || []).filter((p) => p.published !== false);
+  const comingSoon = shop.comingSoon || [];
+
+  return (
+    <section id="shop" className="section-pad" style={{ background: "#0D1B35" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="mb-12 text-right">
+          <h2
+            className="text-3xl md:text-4xl font-extrabold mb-2"
+            style={{ color: "#F0F4FF" }}
+          >
+            {shop.title || "החנות של ד״ר ספורט"}
+          </h2>
+          <p className="text-base" style={{ color: "#8BA4C8" }}>
+            {shop.subtitle || ""}
+          </p>
+          <div
+            className="h-1 rounded-full mt-3"
+            style={{
+              background: "linear-gradient(90deg, transparent, var(--accent))",
+              width: "180px",
+              marginLeft: "auto",
+            }}
+          />
         </div>
 
-        {/* Product 2: Electric Cupping Cup */}
-        <div
-          className="mt-14 rounded-3xl p-6 md:p-8"
-          style={{
-            background: "rgba(13,27,53,0.6)",
-            border: "1px solid rgba(43,87,184,0.35)",
-          }}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="flex flex-col gap-3">
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{ border: "1px solid rgba(43,87,184,0.4)", background: "#f8f8f8" }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={cupImages[cupActiveImage].src}
-                  alt={cupImages[cupActiveImage].alt}
-                  style={{ width: "100%", height: "auto", display: "block" }}
-                />
-              </div>
-              {cupImages.length > 1 && (
-                <div className="flex gap-3 overflow-x-auto pb-1">
-                  {cupImages.map((img, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setCupActiveImage(i)}
-                      style={{
-                        flex: "0 0 80px",
-                        height: "80px",
-                        borderRadius: "12px",
-                        overflow: "hidden",
-                        border:
-                          cupActiveImage === i
-                            ? "2px solid var(--accent)"
-                            : "2px solid rgba(43,87,184,0.3)",
-                        background: "#f8f8f8",
-                        cursor: "pointer",
-                        padding: 0,
-                      }}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={img.src}
-                        alt={img.alt}
-                        style={{ width: "80px", height: "80px", objectFit: "cover", display: "block" }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-5 text-right">
-              <div>
-                <h3 className="text-2xl font-extrabold mb-1" style={{ color: "#F0F4FF" }}>
-                  כוס רוח חשמלית - Dr. Sport™
-                </h3>
-                <div className="flex items-baseline gap-3 mt-2">
-                  <span className="text-3xl font-extrabold" style={{ color: "var(--accent)" }}>
-                    ₪120
-                  </span>
-                  <span className="text-sm" style={{ color: "#8BA4C8" }}>
-                    + משלוח ₪30
-                  </span>
-                </div>
-              </div>
-              <p className="text-sm leading-relaxed" style={{ color: "#8BA4C8" }}>
-                כוס רוח (כוסות רוח) חשמלית מודרנית לטיפול עצמי בבית - שחרור שרירים
-                תפוסים, שיפור זרימת הדם והקלה על כאבי שרירים לאחר אימון. עוצמות שאיבה
-                מתכווננות, נטענת USB וקלה לשימוש. מגיעה עם הוראות שימוש מלאות.
-              </p>
-              <div className="flex items-center gap-3 justify-end">
-                <span className="text-sm font-semibold" style={{ color: "#F0F4FF" }}>
-                  כמות:
-                </span>
-                <div
-                  className="flex items-center rounded-lg overflow-hidden"
-                  style={{ border: "1px solid rgba(43,87,184,0.4)" }}
-                >
-                  <button
-                    onClick={() => setCupQty(Math.max(1, cupQty - 1))}
-                    className="px-4 py-2 font-bold"
-                    style={{ color: "#8BA4C8", background: "rgba(43,87,184,0.2)" }}
-                  >
-                    -
-                  </button>
-                  <span
-                    className="px-5 py-2 font-bold"
-                    style={{ color: "#F0F4FF", minWidth: "48px", textAlign: "center" }}
-                  >
-                    {cupQty}
-                  </span>
-                  <button
-                    onClick={() => setCupQty(Math.min(10, cupQty + 1))}
-                    className="px-4 py-2 font-bold"
-                    style={{ color: "#8BA4C8", background: "rgba(43,87,184,0.2)" }}
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-              <button
-                onClick={handleAddCupToCart}
-                className="w-full py-4 rounded-xl text-base font-extrabold tracking-wide transition-all duration-200"
-                style={{ background: "var(--accent)", color: "#050E1F" }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--accent-dark)";
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "var(--accent)";
-                  e.currentTarget.style.transform = "none";
-                }}
-              >
-                🛒 הוסף לסל
-              </button>
-            </div>
-          </div>
-        </div>
+        {products.map((p) => (
+          <ProductCard key={p.id} product={p} />
+        ))}
 
         {/* Coming Soon Items */}
-        <div className="mt-12">
-          <h4
-            className="text-lg font-bold mb-6 text-right"
-            style={{ color: "#8BA4C8" }}
-          >
-            בקרוב בחנות
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {comingSoon.map((item, i) => (
-              <div
-                key={i}
-                className="rounded-xl p-5 flex items-center justify-between"
-                style={{
-                  background: "rgba(13,27,53,0.5)",
-                  border: "1px dashed rgba(43,87,184,0.3)",
-                  opacity: 0.6,
-                }}
-              >
-                <div>
-                  <p className="font-bold" style={{ color: "#F0F4FF" }}>
-                    {item.name}
-                  </p>
-                  <p className="text-sm mt-1" style={{ color: "#8BA4C8" }}>
-                    {item.price}
-                  </p>
-                </div>
-                <span
-                  className="text-xs font-bold px-3 py-1 rounded-full"
+        {comingSoon.length > 0 && (
+          <div className="mt-12">
+            <h4 className="text-lg font-bold mb-6 text-right" style={{ color: "#8BA4C8" }}>
+              בקרוב בחנות
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {comingSoon.map((item, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl p-5 flex items-center justify-between"
                   style={{
-                    background: "rgba(255,109,0,0.15)",
-                    color: "#FF6D00",
-                    border: "1px solid rgba(255,109,0,0.3)",
+                    background: "rgba(13,27,53,0.5)",
+                    border: "1px dashed rgba(43,87,184,0.3)",
+                    opacity: 0.6,
                   }}
                 >
-                  Coming Soon
-                </span>
-              </div>
-            ))}
+                  <div>
+                    <p className="font-bold" style={{ color: "#F0F4FF" }}>
+                      {item.name}
+                    </p>
+                    <p className="text-sm mt-1" style={{ color: "#8BA4C8" }}>
+                      {item.price}
+                    </p>
+                  </div>
+                  <span
+                    className="text-xs font-bold px-3 py-1 rounded-full"
+                    style={{
+                      background: "rgba(255,109,0,0.15)",
+                      color: "#FF6D00",
+                      border: "1px solid rgba(255,109,0,0.3)",
+                    }}
+                  >
+                    Coming Soon
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
