@@ -24,6 +24,7 @@ const productImages = [
 ];
 
 const cupImages = [
+  { src: `${BASE}/cup-3.jpg`, alt: "כוס רוח חשמלית - Dr. Sport - טיפול עצמי בבית" },
   { src: `${BASE}/cup-2.jpg`, alt: "כוס רוח חשמלית - Dr. Sport" },
   { src: `${BASE}/cup-1.jpg`, alt: "כוס רוח חשמלית - Dr. Sport - שני מצבי פעולה" },
 ];
