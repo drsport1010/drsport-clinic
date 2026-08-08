@@ -194,8 +194,8 @@
     "productName": "חולצת סקראבס עם רקימה + מכנסי סקראבס Dr. Sport™",
     "price": "₪239",
     "shippingCost": "30",
-    "paymentLinkScrubs": "",
-    "paymentLinkCup": "",
+    "paymentLinkScrubs": "https://pay.grow.link/OTYwMzI~85bead9903ca2198ea74ea316d510563-MzgwNTY4NQ",
+    "paymentLinkCup": "https://pay.grow.link/OTYwMzI~e5017fe8296f8e3473fe832c2352b3b6-MzgwNTg3MA",
     "comingSoon": [
       {
         "name": "גרביי דחיסה - ספורטמד™",
@@ -214,7 +214,7 @@
         "price": 239,
         "shipping": 30,
         "maxQty": 1,
-        "paymentLink": "",
+        "paymentLink": "https://pay.grow.link/OTYwMzI~85bead9903ca2198ea74ea316d510563-MzgwNTY4NQ",
         "description": "סקראבס מקצועיים המשלבים טכנולוגיית ניהול לחות מתקדמת עם עיצוב ספורטיבי ארגונומי. מיועדים לרופאים, אחיות, ופיזיותרפיסטים הפועלים שעות ארוכות. נוחות מרבית, עמידות גבוהה, וסגנון שמדבר בשבחי הרפואה המודרנית.",
         "images": [
           "/scrub-main.jpg",
@@ -265,7 +265,7 @@
         "price": 189,
         "shipping": 30,
         "maxQty": 10,
-        "paymentLink": "",
+        "paymentLink": "https://pay.grow.link/OTYwMzI~e5017fe8296f8e3473fe832c2352b3b6-MzgwNTg3MA",
         "description": "כוס רוח (כוסות רוח) חשמלית מודרנית לטיפול עצמי בבית - שחרור שרירים תפוסים, שיפור זרימת הדם והקלה על כאבי שרירים לאחר אימון. עוצמות שאיבה מתכווננות, נטענת USB וקלה לשימוש. מגיעה עם הוראות שימוש מלאות.",
         "images": [
           "/shop/msjf0nfh-whatsapp-image-2026-08-07-at-23-42-19.jpeg",
