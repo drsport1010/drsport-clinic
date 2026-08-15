@@ -77,6 +77,7 @@
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-treatments">טיפולים</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-shop">חנות</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-contact">צור קשר</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-weekly">עדכון שבועי</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-blog">בלוג</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-about">אודות</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-footer">פוטר</a></li>
@@ -155,6 +156,21 @@
           <h5 class="mb-3" style="color:#F0F4FF;">סיבות פנייה</h5>
           <div id="reasons-items"></div>
           <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="addReasonRow()">+ הוסף סיבה</button>
+        </div>
+
+        <!-- WEEKLY UPDATE TAB -->
+        <div class="tab-pane fade" id="tab-weekly">
+          <h5 class="mb-2" style="color:#F0F4FF;">העדכון השבועי</h5>
+          <p style="color:#8BA4C8; font-size:0.85rem;">כאן מנהלים את מהדורות העדכון השבועי. המהדורה עם התאריך החדש ביותר מוצגת באתר כעדכון הנוכחי; מהדורות ישנות נשמרות אוטומטית בארכיון.</p>
+          <div class="athlete-card" style="font-size:0.8rem; color:#8BA4C8;">
+            <strong style="color:#00E676;">מדריך כתיבת תוכן המהדורה:</strong><br/>
+            · שורה שמתחילה ב-<code>##</code> ורווח = כותרת פרק (למשל: הפציעות החדשות השבוע)<br/>
+            · שורה שמתחילה ב-<code>*</code> ורווח = נקודה ברשימה (אפשר "שם ספורטאי: טקסט")<br/>
+            · קישור: <code>[טקסט](כתובת)</code> · הדגשה: <code>**טקסט**</code><br/>
+            · כל שורה אחרת = פסקה רגילה
+          </div>
+          <div id="weekly-items"></div>
+          <button type="button" class="btn btn-outline-success btn-sm" onclick="addWeeklyRow()">+ הוסף מהדורה</button>
         </div>
 
         <!-- BLOG TAB -->
@@ -359,6 +375,17 @@
       obj.published = obj.published !== 'false';
       data.articles.push(obj);
     });
+    data.weeklyUpdates = [];
+    document.querySelectorAll('.athlete-card[data-type="weekly"]').forEach(card => {
+      const obj = {};
+      card.querySelectorAll('[data-field]').forEach(el => { obj[el.dataset.field] = el.value; });
+      if (!obj.headline || !obj.headline.trim()) return;
+      if (!obj.id) obj.id = new Date().toISOString().slice(0, 10);
+      const p = obj.id.split('-');
+      obj.dateLabel = parseInt(p[2]) + '.' + parseInt(p[1]) + '.' + p[0];
+      data.weeklyUpdates.push(obj);
+    });
+    data.weeklyUpdates.sort((a, b) => (a.id < b.id ? 1 : -1));
     data.about = {
       title: document.getElementById('about-title').value,
       paragraphs: Array.from(document.querySelectorAll('.about-para')).map(el => el.value).filter(x => x.trim()),
@@ -416,6 +443,8 @@
     ((c.contact || {}).reasons || []).forEach(r => addReasonRow(r));
     document.getElementById('articles-items').innerHTML = '';
     (c.articles || []).forEach(a => addArticleRow(a));
+    document.getElementById('weekly-items').innerHTML = '';
+    (c.weeklyUpdates || []).forEach(w => addWeeklyRow(w));
     const ab = c.about || { title: '', paragraphs: [], location: '' };
     document.getElementById('about-title').value = ab.title || '';
     document.getElementById('about-location').value = ab.location || '';
@@ -554,6 +583,24 @@
         <div class="col-md-9"><label class="form-label">הסבר המדד</label><input type="text" class="form-control" data-field="ratingText" value="${esc(a.ratingText)}" /></div>
       </div>`;
     document.getElementById('articles-items').appendChild(div);
+  }
+
+  function addWeeklyRow(w) {
+    w = w || {};
+    const div = document.createElement('div');
+    div.className = 'athlete-card';
+    div.dataset.type = 'weekly';
+    div.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <strong>${esc(w.dateLabel ? 'מהדורת ' + w.dateLabel : 'מהדורה חדשה')}</strong>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.athlete-card').remove()">מחק</button>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-md-4"><label class="form-label">תאריך המהדורה</label><input type="date" class="form-control" data-field="id" value="${esc(w.id || '')}" /></div>
+        <div class="col-md-8"><label class="form-label">כותרת ראשית</label><input type="text" class="form-control" data-field="headline" value="${esc(w.headline)}" /></div>
+      </div>
+      <div class="mb-2"><label class="form-label">תוכן המהדורה (לפי המדריך למעלה)</label><textarea class="form-control" data-field="body" rows="14" dir="rtl">${esc(w.body)}</textarea></div>`;
+    document.getElementById('weekly-items').appendChild(div);
   }
 
   function addProductRow(p) {
